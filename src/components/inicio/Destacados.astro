@@ -1,0 +1,31 @@
+---
+import ArrowRight from '@lucide/astro/icons/arrow-right';
+import { getTrabajosPublicados, seleccionarDestacados } from '../../lib/trabajos';
+import GrillaTrabajos from '../GrillaTrabajos.astro';
+
+const destacados = seleccionarDestacados(await getTrabajosPublicados());
+---
+
+{
+  destacados.length > 0 && (
+    <section aria-labelledby="titulo-destacados" class="bg-madera py-16 sm:py-20">
+      <div class="contenedor">
+        <h2 id="titulo-destacados" class="text-3xl font-extrabold tracking-tight">
+          Trabajos destacados
+        </h2>
+        <div class="franja-cmyk mt-3 h-1 w-16 rounded-full" />
+        <div class="mt-10">
+          {/* Debajo del hero: no se ven al abrir la página, así que se cargan en diferido. */}
+          <GrillaTrabajos trabajos={destacados} primerasEager={0} nivelTitulo="h3" />
+        </div>
+        <a
+          href="/trabajos/"
+          class="mt-10 inline-flex min-h-11 items-center gap-2 font-bold text-cian-texto underline-offset-4 hover:underline"
+        >
+          Ver todos los trabajos
+          <ArrowRight class="size-5" />
+        </a>
+      </div>
+    </section>
+  )
+}

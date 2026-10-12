@@ -1,0 +1,38 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Galeria from '../../../components/Galeria.astro';
+import { negocio } from '../../../config/negocio';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { categoriasConTrabajos, getCategorias, getTrabajosPublicados } from '../../../lib/trabajos';
+
+// Solo se generan páginas para las categorías con trabajos publicados.
+export const getStaticPaths = (async () => {
+  const trabajos = await getTrabajosPublicados();
+  const categorias = categoriasConTrabajos(await getCategorias(), trabajos);
+  return categorias.map((categoria) => ({
+    params: { categoria: categoria.id },
+    props: {
+      categoria,
+      categorias,
+      trabajos: trabajos.filter((trabajo) => trabajo.data.categoria.id === categoria.id),
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+const { categoria, categorias, trabajos } = Astro.props;
+const { nombre, descripcion } = categoria.data;
+---
+
+<BaseLayout
+  titulo={nombre}
+  descripcion={descripcion ??
+    `${nombre}: trabajos de corte láser e impresión a todo color sobre madera hechos por ${negocio.nombre} en ${negocio.ubicacion.localidad}.`}
+>
+  <Galeria
+    titulo={nombre}
+    intro={descripcion}
+    trabajos={trabajos}
+    categorias={categorias}
+    categoriaActual={categoria.id}
+  />
+</BaseLayout>

@@ -1,0 +1,10 @@
+---
+/** Un dato legal del titular, o un aviso bien visible si todavía falta en la configuración. */
+interface Props {
+  valor?: string;
+}
+
+const { valor } = Astro.props;
+---
+
+{valor ? <span>{valor}</span> : <mark class="rounded bg-ambar px-1 text-tinta">pendiente de completar</mark>}

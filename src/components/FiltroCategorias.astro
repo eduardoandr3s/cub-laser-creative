@@ -1,0 +1,39 @@
+---
+import type { Categoria } from '../lib/trabajos';
+
+interface Props {
+  /** Solo las categorías con trabajos publicados, ya ordenadas. */
+  categorias: Categoria[];
+  /** Id de la categoría actual; sin valor, la opción activa es "Todos". */
+  actual?: string;
+}
+
+const { categorias, actual } = Astro.props;
+
+const opciones = [
+  { href: '/trabajos/', nombre: 'Todos', activa: !actual },
+  ...categorias.map((categoria) => ({
+    href: `/trabajos/categoria/${categoria.id}/`,
+    nombre: categoria.data.nombre,
+    activa: categoria.id === actual,
+  })),
+];
+---
+
+<nav aria-label="Filtrar por categoría">
+  <ul class="flex flex-wrap gap-2">
+    {
+      opciones.map(({ href, nombre, activa }) => (
+        <li>
+          <a
+            href={href}
+            aria-current={activa ? 'page' : undefined}
+            class="inline-flex min-h-11 items-center rounded-full border border-tinta/15 bg-white px-4 text-sm font-semibold text-tinta transition-colors hover:border-tinta aria-[current=page]:border-tinta aria-[current=page]:bg-tinta aria-[current=page]:text-papel"
+          >
+            {nombre}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>

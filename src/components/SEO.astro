@@ -1,0 +1,58 @@
+---
+import { negocio } from '../config/negocio';
+
+export interface ImagenSEO {
+  /** URL absoluta o ruta del sitio (se convierte en absoluta). */
+  url: string;
+  ancho: number;
+  alto: number;
+  alt: string;
+}
+
+interface Props {
+  /** Título de la página. Sin título, se usa el de la página de inicio. */
+  titulo?: string;
+  descripcion?: string;
+  imagen?: ImagenSEO;
+  tipo?: 'website' | 'article';
+  noindex?: boolean;
+}
+
+const {
+  titulo,
+  descripcion = negocio.descripcion,
+  imagen = {
+    url: '/og-default.png',
+    ancho: 1200,
+    alto: 630,
+    alt: `${negocio.nombre} — ${negocio.eslogan}`,
+  },
+  tipo = 'website',
+  noindex = false,
+} = Astro.props;
+
+const tituloCompleto = titulo ? `${titulo} | ${negocio.nombre}` : `${negocio.nombre} — ${negocio.eslogan}`;
+const canonica = new URL(Astro.url.pathname, Astro.site).href;
+const imagenAbsoluta = new URL(imagen.url, Astro.site).href;
+---
+
+<title>{tituloCompleto}</title>
+<meta name="description" content={descripcion} />
+{noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonica} />}
+
+<meta property="og:type" content={tipo} />
+<meta property="og:site_name" content={negocio.nombre} />
+<meta property="og:locale" content="es_ES" />
+<meta property="og:title" content={titulo ?? tituloCompleto} />
+<meta property="og:description" content={descripcion} />
+<meta property="og:url" content={canonica} />
+<meta property="og:image" content={imagenAbsoluta} />
+<meta property="og:image:width" content={String(imagen.ancho)} />
+<meta property="og:image:height" content={String(imagen.alto)} />
+<meta property="og:image:alt" content={imagen.alt} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={titulo ?? tituloCompleto} />
+<meta name="twitter:description" content={descripcion} />
+<meta name="twitter:image" content={imagenAbsoluta} />
+<meta name="twitter:image:alt" content={imagen.alt} />

@@ -1,0 +1,52 @@
+---
+import { Picture } from 'astro:assets';
+import { getEntry } from 'astro:content';
+import Play from '@lucide/astro/icons/play';
+import type { Trabajo } from '../lib/trabajos';
+
+interface Props {
+  trabajo: Trabajo;
+  /** Cargar la portada sin esperar (solo para las tarjetas visibles al abrir la página). */
+  eager?: boolean;
+  nivelTitulo?: 'h2' | 'h3';
+}
+
+const { trabajo, eager = false, nivelTitulo: Titulo = 'h2' } = Astro.props;
+const { titulo, portada, videos } = trabajo.data;
+const categoria = await getEntry(trabajo.data.categoria);
+---
+
+<article
+  class="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-tinta/5 transition-shadow hover:shadow-md has-[a:focus-visible]:outline-3 has-[a:focus-visible]:outline-offset-3 has-[a:focus-visible]:outline-tinta"
+>
+  <div class="flex flex-1 flex-col gap-1 p-4">
+    <Titulo class="text-lg leading-snug font-bold">
+      <a
+        href={`/trabajos/${trabajo.id}/`}
+        class="after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-none"
+      >
+        {titulo}
+      </a>
+    </Titulo>
+    {categoria && <p class="text-sm font-semibold text-cian-texto">{categoria.data.nombre}</p>}
+  </div>
+  <div class="relative -order-1 overflow-hidden bg-madera">
+    <Picture
+      src={portada.src}
+      alt={portada.alt}
+      formats={['avif', 'webp']}
+      widths={[400, 640, 960]}
+      sizes="(min-width: 72rem) 22rem, (min-width: 64rem) 30vw, (min-width: 40rem) 45vw, 100vw"
+      loading={eager ? 'eager' : 'lazy'}
+      class="aspect-4/3 w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+    />
+    {
+      videos.length > 0 && (
+        <span class="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-ambar px-3 py-1 text-xs font-bold text-tinta shadow-sm">
+          <Play class="size-3.5" fill="currentColor" />
+          Incluye video
+        </span>
+      )
+    }
+  </div>
+</article>

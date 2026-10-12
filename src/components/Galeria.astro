@@ -1,0 +1,46 @@
+---
+import type { Categoria, Trabajo } from '../lib/trabajos';
+import BotonWhatsApp from './BotonWhatsApp.astro';
+import FiltroCategorias from './FiltroCategorias.astro';
+import GrillaTrabajos from './GrillaTrabajos.astro';
+
+interface Props {
+  titulo: string;
+  intro?: string;
+  trabajos: Trabajo[];
+  categorias: Categoria[];
+  categoriaActual?: string;
+}
+
+const { titulo, intro, trabajos, categorias, categoriaActual } = Astro.props;
+---
+
+<div class="contenedor py-10 sm:py-14">
+  <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">{titulo}</h1>
+  <div class="franja-cmyk mt-3 h-1 w-16 rounded-full"></div>
+  {intro && <p class="mt-5 max-w-2xl text-lg text-tinta-suave">{intro}</p>}
+
+  {
+    trabajos.length > 0 ? (
+      <>
+        {categorias.length > 0 && (
+          <div class="mt-8">
+            <FiltroCategorias categorias={categorias} actual={categoriaActual} />
+          </div>
+        )}
+        <div class="mt-8">
+          <GrillaTrabajos trabajos={trabajos} />
+        </div>
+      </>
+    ) : (
+      <div class="mt-10 max-w-xl rounded-2xl bg-madera p-8">
+        <h2 class="text-xl font-bold">Muy pronto, nuestros trabajos aquí</h2>
+        <p class="mt-2 text-tinta-suave">
+          Estamos preparando la galería. Mientras tanto, escríbenos y te enseñamos ejemplos de lo
+          que hacemos.
+        </p>
+        <BotonWhatsApp class="mt-6" />
+      </div>
+    )
+  }
+</div>

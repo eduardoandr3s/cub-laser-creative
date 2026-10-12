@@ -1,0 +1,175 @@
+---
+import '../styles/global.css';
+import fuente from '@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2?url';
+import MapPin from '@lucide/astro/icons/map-pin';
+import Logo from '../components/Logo.astro';
+import SEO, { type ImagenSEO } from '../components/SEO.astro';
+import WhatsAppFlotante from '../components/WhatsAppFlotante.astro';
+import Facebook from '../components/iconos/Facebook.astro';
+import Instagram from '../components/iconos/Instagram.astro';
+import TikTok from '../components/iconos/TikTok.astro';
+import WhatsApp from '../components/iconos/WhatsApp.astro';
+import YouTube from '../components/iconos/YouTube.astro';
+import { negocio, whatsappActivo } from '../config/negocio';
+import { enlaceWhatsApp } from '../lib/whatsapp';
+
+interface Props {
+  titulo?: string;
+  descripcion?: string;
+  imagen?: ImagenSEO;
+  tipo?: 'website' | 'article';
+  noindex?: boolean;
+  /** Mensaje del botón flotante de WhatsApp. Por defecto, el genérico. */
+  mensajeWhatsApp?: string;
+}
+
+const { mensajeWhatsApp = negocio.whatsapp.mensajeGenerico, ...seo } = Astro.props;
+
+const ruta = Astro.url.pathname;
+const navegacion = [
+  { href: '/', texto: 'Inicio', actual: ruta === '/' ? 'page' : undefined },
+  {
+    href: '/trabajos/',
+    texto: 'Trabajos',
+    actual: ruta === '/trabajos/' ? 'page' : ruta.startsWith('/trabajos/') ? 'true' : undefined,
+  },
+] as const;
+
+const iconosRedes = { instagram: Instagram, tiktok: TikTok, facebook: Facebook, youtube: YouTube };
+const nombresRedes = { instagram: 'Instagram', tiktok: 'TikTok', facebook: 'Facebook', youtube: 'YouTube' };
+const redes = (Object.keys(iconosRedes) as (keyof typeof iconosRedes)[])
+  .filter((red) => negocio.redes[red])
+  .map((red) => ({ url: negocio.redes[red]!, nombre: nombresRedes[red], Icono: iconosRedes[red] }));
+
+const pais = new Intl.DisplayNames(['es'], { type: 'region' }).of(negocio.ubicacion.pais);
+const anio = new Date().getFullYear();
+const enlacePie =
+  '-mx-1 inline-flex min-h-11 items-center gap-2 px-1 font-semibold text-cian-texto underline-offset-2 hover:underline';
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preload" href={fuente} as="font" type="font/woff2" crossorigin />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#F8FAFC" />
+    <meta name="generator" content={Astro.generator} />
+    <SEO {...seo} />
+    <slot name="head" />
+  </head>
+  <body class="flex min-h-dvh flex-col">
+    <a
+      href="#contenido"
+      class="sr-only rounded-lg bg-tinta px-4 py-2 font-bold text-papel focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50"
+    >
+      Saltar al contenido
+    </a>
+
+    <header class="border-b border-tinta/10 bg-papel">
+      <div class="contenedor flex items-center justify-between gap-4 py-3">
+        <a href="/" class="-m-1 rounded-md p-1">
+          <Logo />
+        </a>
+        <nav aria-label="Principal">
+          <ul class="flex items-center gap-1 sm:gap-2">
+            {
+              navegacion.map(({ href, texto, actual }) => (
+                <li>
+                  <a
+                    href={href}
+                    aria-current={actual}
+                    class="relative block rounded-md px-3 py-2.5 font-semibold text-tinta-suave transition-colors hover:text-tinta aria-[current]:text-tinta aria-[current]:after:absolute aria-[current]:after:inset-x-3 aria-[current]:after:bottom-1 aria-[current]:after:h-[3px] aria-[current]:after:rounded-full aria-[current]:after:franja-cmyk"
+                  >
+                    {texto}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="contenido" class="flex-1">
+      <slot />
+    </main>
+
+    <footer class="mt-16 bg-madera">
+      <div class="franja-cmyk h-1"></div>
+      <!-- pb-28: deja sitio al botón flotante de WhatsApp para que no tape el pie. -->
+      <div class="contenedor grid gap-8 pt-10 pb-28 sm:grid-cols-2 lg:grid-cols-3">
+        <div>
+          <p class="text-lg font-extrabold">{negocio.nombre}</p>
+          <p class="mt-1 text-sm text-tinta-suave">{negocio.eslogan}</p>
+          <p class="mt-4 flex items-center gap-2 text-sm">
+            <MapPin class="size-4 shrink-0 text-tinta-suave" />
+            {negocio.ubicacion.localidad}, {pais}
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-sm font-bold tracking-wide uppercase">Contacto</h2>
+          <ul class="mt-3 space-y-1 text-sm">
+            {
+              whatsappActivo && (
+                <li>
+                  <a
+                    href={enlaceWhatsApp(negocio.whatsapp.numero, negocio.whatsapp.mensajeGenerico)}
+                    target="_blank"
+                    rel="noopener"
+                    class={enlacePie}
+                  >
+                    <WhatsApp class="size-4 shrink-0" />
+                    WhatsApp
+                  </a>
+                </li>
+              )
+            }
+            {
+              redes.map(({ url, nombre, Icono }) => (
+                <li>
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener"
+                    class={enlacePie}
+                  >
+                    <Icono class="size-4 shrink-0" />
+                    {nombre}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="text-sm font-bold tracking-wide uppercase">Información</h2>
+          <ul class="mt-3 space-y-1 text-sm">
+            <li>
+              <a
+                href="/aviso-legal/"
+                class={enlacePie}
+              >
+                Aviso legal
+              </a>
+            </li>
+            <li>
+              <a
+                href="/privacidad/"
+                class={enlacePie}
+              >
+                Privacidad
+              </a>
+            </li>
+          </ul>
+          <p class="mt-4 text-sm text-tinta-suave">© {anio} {negocio.nombre}</p>
+        </div>
+      </div>
+    </footer>
+
+    <WhatsAppFlotante mensaje={mensajeWhatsApp} />
+  </body>
+</html>

@@ -1,0 +1,22 @@
+---
+import ComoEncargar from '../components/inicio/ComoEncargar.astro';
+import CtaWhatsApp from '../components/inicio/CtaWhatsApp.astro';
+import Destacados from '../components/inicio/Destacados.astro';
+import Diferenciales from '../components/inicio/Diferenciales.astro';
+import Hero from '../components/inicio/Hero.astro';
+import { negocio } from '../config/negocio';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { localBusiness } from '../lib/jsonld';
+
+// `<` escapado para que ningún texto pueda cerrar la etiqueta <script>.
+const jsonLd = JSON.stringify(localBusiness(negocio)).replace(/</g, '\\u003c');
+---
+
+<BaseLayout>
+  <script is:inline slot="head" type="application/ld+json" set:html={jsonLd} />
+  <Hero />
+  <Diferenciales />
+  <Destacados />
+  <ComoEncargar />
+  <CtaWhatsApp />
+</BaseLayout>

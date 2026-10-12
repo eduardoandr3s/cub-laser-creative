@@ -1,0 +1,44 @@
+---
+import { negocio, whatsappActivo } from '../config/negocio';
+import { enlaceWhatsApp } from '../lib/whatsapp';
+import WhatsApp from './iconos/WhatsApp.astro';
+
+interface Props {
+  /** Mensaje prellenado. Por defecto, el genérico del negocio. */
+  mensaje?: string;
+  texto?: string;
+  class?: string;
+}
+
+const {
+  mensaje = negocio.whatsapp.mensajeGenerico,
+  texto = 'Escríbenos por WhatsApp',
+  class: clase,
+} = Astro.props;
+
+const base =
+  'inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full px-6 py-3 text-base font-bold';
+---
+
+{
+  whatsappActivo ? (
+    <a
+      href={enlaceWhatsApp(negocio.whatsapp.numero, mensaje)}
+      target="_blank"
+      rel="noopener"
+      class:list={[base, 'bg-magenta text-white shadow-sm transition hover:brightness-90', clase]}
+    >
+      <WhatsApp class="size-5 shrink-0" />
+      {texto}
+    </a>
+  ) : (
+    <a
+      aria-disabled="true"
+      title="Falta el número de WhatsApp en src/config/negocio.ts"
+      class:list={[base, 'cursor-not-allowed bg-tinta/10 text-tinta-suave', clase]}
+    >
+      <WhatsApp class="size-5 shrink-0" />
+      {texto}
+    </a>
+  )
+}

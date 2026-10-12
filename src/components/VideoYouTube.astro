@@ -1,0 +1,86 @@
+---
+/**
+ * Video de YouTube con carga bajo demanda ("facade"): hasta que se pulsa solo hay
+ * una miniatura y un botón. Al pulsar se crea el iframe de youtube-nocookie.com,
+ * también en móviles y Safari (lite-youtube usaría ahí la API de youtube.com).
+ * Sin JavaScript, el botón es un enlace normal al video en YouTube.
+ */
+import Play from '@lucide/astro/icons/play';
+import type { VideoYouTube } from '../lib/youtube';
+
+interface Props {
+  video: VideoYouTube;
+  /** Título del trabajo, para el nombre accesible del botón y del reproductor. */
+  titulo: string;
+}
+
+const { video, titulo } = Astro.props;
+---
+
+<video-youtube
+  data-id={video.id}
+  data-titulo={`Video: ${titulo}`}
+  class:list={[
+    'relative block overflow-hidden rounded-2xl bg-tinta',
+    video.vertical ? 'aspect-9/16 w-full max-w-xs' : 'aspect-video w-full',
+  ]}
+>
+  <img
+    src={`https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`}
+    alt=""
+    width="480"
+    height="360"
+    loading="lazy"
+    decoding="async"
+    class="absolute inset-0 size-full object-cover"
+  />
+  <a
+    href={`https://www.youtube.com/watch?v=${video.id}`}
+    target="_blank"
+    rel="noopener"
+    class="group absolute inset-0 flex items-center justify-center focus-visible:-outline-offset-8 focus-visible:outline-white"
+  >
+    <span
+      class="flex size-16 items-center justify-center rounded-full bg-magenta text-white shadow-lg ring-4 ring-white/30 transition-transform group-hover:scale-110"
+    >
+      <Play class="size-7 translate-x-0.5" fill="currentColor" />
+    </span>
+    <span class="sr-only">Reproducir video: {titulo}</span>
+  </a>
+</video-youtube>
+
+<script>
+  class VideoYouTube extends HTMLElement {
+    connectedCallback() {
+      const boton = this.querySelector('a');
+      if (!boton) return;
+      // Con JavaScript, el enlace pasa a ser un botón que reproduce el video aquí mismo.
+      boton.setAttribute('role', 'button');
+      boton.removeAttribute('target');
+      boton.addEventListener('click', (evento) => {
+        evento.preventDefault();
+        this.activar();
+      });
+      boton.addEventListener('keydown', (evento) => {
+        if (evento.key === ' ') {
+          evento.preventDefault();
+          this.activar();
+        }
+      });
+    }
+
+    activar() {
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(this.dataset.id ?? '')}?autoplay=1&playsinline=1&rel=0`;
+      iframe.title = this.dataset.titulo ?? 'Video de YouTube';
+      iframe.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share';
+      iframe.allowFullscreen = true;
+      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+      iframe.className = 'absolute inset-0 size-full border-0';
+      this.replaceChildren(iframe);
+      iframe.focus();
+    }
+  }
+
+  customElements.define('video-youtube', VideoYouTube);
+</script>

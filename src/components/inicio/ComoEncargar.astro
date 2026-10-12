@@ -1,0 +1,26 @@
+---
+import { inicio } from '../../config/inicio';
+---
+
+<section aria-labelledby="titulo-pasos" class="contenedor py-16 sm:py-20">
+  <h2 id="titulo-pasos" class="text-3xl font-extrabold tracking-tight">Cómo encargar tu diseño</h2>
+  <div class="franja-cmyk mt-3 h-1 w-16 rounded-full"></div>
+
+  <ol class="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(12rem,1fr))]">
+    {
+      inicio.pasos.map(({ titulo, texto }, i) => (
+        <li>
+          {/* El número ya lo anuncia la lista ordenada. */}
+          <span
+            aria-hidden="true"
+            class="flex size-12 items-center justify-center rounded-full bg-ambar text-xl font-extrabold text-tinta"
+          >
+            {i + 1}
+          </span>
+          <h3 class="mt-4 text-lg font-bold">{titulo}</h3>
+          <p class="mt-2 text-tinta-suave">{texto}</p>
+        </li>
+      ))
+    }
+  </ol>
+</section>

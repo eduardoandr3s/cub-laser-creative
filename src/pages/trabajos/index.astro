@@ -1,0 +1,20 @@
+---
+import Galeria from '../../components/Galeria.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { categoriasConTrabajos, getCategorias, getTrabajosPublicados } from '../../lib/trabajos';
+
+const trabajos = await getTrabajosPublicados();
+const categorias = categoriasConTrabajos(await getCategorias(), trabajos);
+---
+
+<BaseLayout
+  titulo="Trabajos"
+  descripcion="Galería de trabajos de corte láser e impresión a todo color sobre madera: llaveros, placas, marcos y detalles para eventos y empresas en Valencia."
+>
+  <Galeria
+    titulo="Nuestros trabajos"
+    intro="Una muestra de piezas que hemos diseñado y fabricado. ¿Te gusta alguna? Pídenos algo parecido."
+    trabajos={trabajos}
+    categorias={categorias}
+  />
+</BaseLayout>

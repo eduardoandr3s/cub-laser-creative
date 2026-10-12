@@ -1,0 +1,18 @@
+---
+/**
+ * Logotipo textual de la marca. Cuando exista el logotipo oficial en SVG,
+ * basta con sustituir el contenido de este componente por la imagen.
+ */
+import { negocio } from '../config/negocio';
+---
+
+<span class="flex items-center gap-2.5">
+  <span aria-hidden="true" class="text-3xl leading-none font-extrabold tracking-tighter">
+    <span class="text-tinta">C</span><span class="texto-cmyk">UB</span>
+  </span>
+  <span aria-hidden="true" class="hidden flex-col border-l border-tinta/15 pl-2.5 leading-tight sm:flex">
+    <span class="text-xs font-bold tracking-[0.2em] text-tinta">LÁSER CREATIVE</span>
+    <span class="text-[0.6875rem] font-medium text-tinta-suave">{negocio.eslogan}</span>
+  </span>
+  <span class="sr-only">{negocio.nombre}</span>
+</span>

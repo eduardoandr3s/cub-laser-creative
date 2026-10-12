@@ -1,0 +1,159 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getImage, Picture } from 'astro:assets';
+import { getEntry, render } from 'astro:content';
+import ArrowLeft from '@lucide/astro/icons/arrow-left';
+import BotonWhatsApp from '../../components/BotonWhatsApp.astro';
+import GrillaTrabajos from '../../components/GrillaTrabajos.astro';
+import VideoYouTube from '../../components/VideoYouTube.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getTrabajosPublicados, seleccionarRelacionados } from '../../lib/trabajos';
+import { mensajeTrabajo } from '../../lib/whatsapp';
+
+export const getStaticPaths = (async () => {
+  const trabajos = await getTrabajosPublicados();
+  return trabajos.map((trabajo) => ({
+    params: { slug: trabajo.id },
+    props: { trabajo, relacionados: seleccionarRelacionados(trabajos, trabajo) },
+  }));
+}) satisfies GetStaticPaths;
+
+const { trabajo, relacionados } = Astro.props;
+const { titulo, descripcion, material, portada, imagenes, videos } = trabajo.data;
+const categoria = await getEntry(trabajo.data.categoria);
+const { Content } = await render(trabajo);
+
+const mensaje = mensajeTrabajo(titulo, new URL(`/trabajos/${trabajo.id}/`, Astro.site));
+
+// Imagen para las vistas previas al compartir (JPEG, que WhatsApp y las redes leen siempre).
+const anchoOG = Math.min(1200, portada.src.width);
+const imagenOG = await getImage({ src: portada.src, width: anchoOG, format: 'jpeg' });
+---
+
+<BaseLayout
+  titulo={titulo}
+  descripcion={descripcion}
+  tipo="article"
+  imagen={{
+    url: imagenOG.src,
+    ancho: anchoOG,
+    alto: Math.round((anchoOG * portada.src.height) / portada.src.width),
+    alt: portada.alt,
+  }}
+  mensajeWhatsApp={mensaje}
+>
+  <article class="contenedor py-8 sm:py-12">
+    <a
+      href="/trabajos/"
+      class="-ml-1 inline-flex min-h-11 items-center gap-2 px-1 font-semibold text-cian-texto underline-offset-4 hover:underline"
+    >
+      <ArrowLeft class="size-4" />
+      Volver a trabajos
+    </a>
+
+    <header class="mt-4 max-w-3xl">
+      {
+        categoria && (
+          <a
+            href={`/trabajos/categoria/${categoria.id}/`}
+            class="inline-flex min-h-11 items-center text-sm font-bold tracking-wide text-cian-texto uppercase underline-offset-4 hover:underline"
+          >
+            {categoria.data.nombre}
+          </a>
+        )
+      }
+      <h1 class="text-3xl leading-tight font-extrabold tracking-tight text-balance sm:text-4xl">
+        {titulo}
+      </h1>
+      {
+        material && (
+          <p class="mt-3 text-tinta-suave">
+            <span class="font-semibold text-tinta">Material:</span> {material}
+          </p>
+        )
+      }
+    </header>
+
+    <div class="mt-8 grid items-start gap-8 lg:grid-cols-[3fr_2fr] lg:gap-12">
+      <Picture
+        src={portada.src}
+        alt={portada.alt}
+        formats={['avif', 'webp']}
+        widths={[480, 800, 1200, 1600]}
+        sizes="(min-width: 72rem) 41rem, (min-width: 64rem) 56vw, 100vw"
+        loading="eager"
+        fetchpriority="high"
+        class="w-full rounded-2xl bg-madera"
+      />
+      <div>
+        <div class="prosa">
+          <Content />
+        </div>
+        <BotonWhatsApp texto="Quiero algo así" mensaje={mensaje} class="mt-8" />
+      </div>
+    </div>
+
+    {
+      imagenes.length > 0 && (
+        <section aria-labelledby="titulo-fotos" class="mt-16">
+          <h2 id="titulo-fotos" class="text-2xl font-extrabold tracking-tight">
+            Más fotos
+          </h2>
+          <ul class="mt-6 grid gap-4 sm:grid-cols-2">
+            {imagenes.map((foto, i) => (
+              <li>
+                <Picture
+                  src={foto.src}
+                  alt={foto.alt || `${titulo} — foto ${i + 1}`}
+                  formats={['avif', 'webp']}
+                  widths={[480, 800, 1200]}
+                  sizes="(min-width: 72rem) 34rem, (min-width: 40rem) 48vw, 100vw"
+                  loading="lazy"
+                  class="w-full rounded-2xl bg-madera"
+                />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      videos.length > 0 && (
+        <section aria-labelledby="titulo-videos" class="mt-16">
+          <h2 id="titulo-videos" class="text-2xl font-extrabold tracking-tight">
+            {videos.length === 1 ? 'Video' : 'Videos'}
+          </h2>
+          <ul class="mt-6 grid gap-6">
+            {videos.map((video) => (
+              <li class:list={[video.vertical ? 'max-w-xs' : 'max-w-3xl']}>
+                <VideoYouTube video={video} titulo={titulo} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      relacionados.length > 0 && (
+        <section aria-labelledby="titulo-relacionados" class="mt-16">
+          <h2 id="titulo-relacionados" class="text-2xl font-extrabold tracking-tight">
+            Trabajos relacionados
+          </h2>
+          <div class="mt-6">
+            <GrillaTrabajos trabajos={relacionados} primerasEager={0} nivelTitulo="h3" />
+          </div>
+        </section>
+      )
+    }
+
+    <a
+      href="/trabajos/"
+      class="mt-12 -ml-1 inline-flex min-h-11 items-center gap-2 px-1 font-semibold text-cian-texto underline-offset-4 hover:underline"
+    >
+      <ArrowLeft class="size-4" />
+      Ver todos los trabajos
+    </a>
+  </article>
+</BaseLayout>

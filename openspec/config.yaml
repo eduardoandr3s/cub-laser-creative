@@ -1,0 +1,55 @@
+schema: spec-driven
+
+context: |
+  Language: es
+  All artifacts must be written in es.
+  Keep OpenSpec structural headings and SHALL/MUST keywords in English.
+
+  ## Proyecto
+  CUB Laser Creative: emprendimiento de corte y grabado láser. La web es un
+  portafolio para mostrar trabajos (fotos y videos) y facilitar el contacto.
+  Empieza simple y crecerá por etapas (CMS, formularios, tienda...).
+  Idioma del sitio: español.
+
+  ## Stack
+  - Astro (salida estática, sin JS en cliente salvo que sea imprescindible)
+  - Tailwind CSS
+  - Content Collections de Astro: cada trabajo es un archivo Markdown con frontmatter
+    validado por schema (zod). Sin base de datos.
+  - Imágenes locales optimizadas con el componente <Image>/<Picture> de Astro.
+  - Videos: YouTube embebido con patrón "facade" (lite-youtube / astro-embed),
+    nunca iframes cargados de inicio.
+  - Contacto: enlaces a WhatsApp (https://wa.me/<numero>?text=...), sin backend.
+  - Node 22 (fijado en .nvmrc), npm como gestor de paquetes.
+  - Desarrollo en local, sin contenedores.
+  - Hosting: Cloudflare Pages (build `npm run build`, salida `dist/`).
+
+  ## Convenciones y restricciones
+  - Coste de infraestructura mínimo: solo servicios gratuitos salvo el dominio.
+  - Mobile-first y accesible (textos alternativos, contraste, navegación con teclado).
+  - Rendimiento: objetivo Lighthouse >= 90 en móvil.
+  - Datos de negocio (nombre, teléfono WhatsApp, redes) centralizados en un único
+    archivo de configuración, nunca repetidos en componentes.
+  - Añadir un trabajo nuevo NO debe requerir tocar código, solo crear contenido.
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always include a "Non-goals" section
+#     tasks:
+#       - Break tasks into chunks of max 2 hours
+
+# Per-operation guidance (optional)
+# Add advisory guidance for how apply and archive work should be conducted.
+# This is separate from artifact rules above.
+# Example:
+#   operations:
+#     apply:
+#       guidance:
+#         - Keep test summaries concise
+#     archive:
+#       guidance:
+#         - Summarize the archive outcome before finishing

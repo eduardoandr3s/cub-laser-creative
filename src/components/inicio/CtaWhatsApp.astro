@@ -1,0 +1,15 @@
+---
+import { inicio } from '../../config/inicio';
+import BotonWhatsApp from '../BotonWhatsApp.astro';
+---
+
+<section aria-labelledby="titulo-cta" class="contenedor">
+  <div class="tema-oscuro relative overflow-hidden rounded-3xl bg-tinta px-6 py-14 text-center text-papel sm:px-12">
+    <h2 id="titulo-cta" class="text-3xl font-extrabold tracking-tight text-balance">
+      {inicio.ctaFinal.titulo}
+    </h2>
+    <p class="mx-auto mt-3 max-w-xl text-lg text-papel/85">{inicio.ctaFinal.texto}</p>
+    <BotonWhatsApp class="mt-8" />
+    <div aria-hidden="true" class="franja-cmyk absolute inset-x-0 bottom-0 h-1.5"></div>
+  </div>
+</section>

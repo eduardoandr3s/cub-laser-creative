@@ -1,0 +1,23 @@
+---
+import type { Trabajo } from '../lib/trabajos';
+import TarjetaTrabajo from './TarjetaTrabajo.astro';
+
+interface Props {
+  trabajos: Trabajo[];
+  /** Cuántas portadas cargar sin esperar: 3 si la grilla está arriba de la página, 0 si no. */
+  primerasEager?: number;
+  nivelTitulo?: 'h2' | 'h3';
+}
+
+const { trabajos, primerasEager = 3, nivelTitulo } = Astro.props;
+---
+
+<ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+  {
+    trabajos.map((trabajo, i) => (
+      <li>
+        <TarjetaTrabajo trabajo={trabajo} eager={i < primerasEager} nivelTitulo={nivelTitulo} />
+      </li>
+    ))
+  }
+</ul>

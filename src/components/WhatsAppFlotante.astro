@@ -1,0 +1,37 @@
+---
+import { negocio, whatsappActivo } from '../config/negocio';
+import { enlaceWhatsApp } from '../lib/whatsapp';
+import WhatsApp from './iconos/WhatsApp.astro';
+
+interface Props {
+  mensaje: string;
+}
+
+const { mensaje } = Astro.props;
+
+// Verde de WhatsApp con el icono en tinta: el blanco sobre ese verde solo da 1,98:1.
+const clases =
+  'fixed right-4 z-40 flex size-14 items-center justify-center rounded-full shadow-lg ring-1 ring-tinta/10 bottom-[max(1rem,env(safe-area-inset-bottom))]';
+---
+
+{
+  whatsappActivo ? (
+    <a
+      href={enlaceWhatsApp(negocio.whatsapp.numero, mensaje)}
+      target="_blank"
+      rel="noopener"
+      aria-label="Escribir por WhatsApp"
+      class:list={[clases, 'bg-whatsapp text-tinta transition hover:scale-105']}
+    >
+      <WhatsApp class="size-7" />
+    </a>
+  ) : (
+    <a
+      aria-disabled="true"
+      aria-label="Escribir por WhatsApp (falta el número en src/config/negocio.ts)"
+      class:list={[clases, 'cursor-not-allowed bg-madera text-tinta-suave']}
+    >
+      <WhatsApp class="size-7" />
+    </a>
+  )
+}
