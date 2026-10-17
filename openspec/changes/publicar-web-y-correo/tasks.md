@@ -26,13 +26,13 @@
   - `/` mantiene `max-age=0, must-revalidate`.
   - Todas las respuestas llevan `X-Content-Type-Options: nosniff`.
 - [x] 2.6 Reescribir la sección de publicación del README: Workers con Workers Builds, servidores DNS en DonDominio (con el aviso de DNSSEC), dominio, `www` y vuelta atrás. Añadir una sección «Correo hola@» (Email Routing, Brevo, Gmail «Enviar como», DMARC y su endurecimiento posterior a `p=quarantine`) y actualizar la lista previa al lanzamiento. Actualizar en `openspec/config.yaml` el hosting (Workers) y los videos (facade propia sobre `youtube-nocookie.com`). Verificar releyendo que ambos documentos ya no mencionan Pages ni astro-embed como opción vigente
-- [ ] 2.7 Ejecutar `npm run verify`, hacer commit (sin coautoría) y push a `main`. Verificar que el build pasa y que el commit aparece en GitHub
+- [x] 2.7 Ejecutar `npm run verify`, hacer commit (sin coautoría) y push a `main`. Verificar que el build pasa y que el commit aparece en GitHub
 
 ## 3. Cloudflare y dominio
 
-- [ ] 3.1 **(titular)** Crear la cuenta de Cloudflare y añadir `cublasercreative.es` en el plan Free. Revisar los registros DNS importados y borrar los de aparcamiento de DonDominio, si los hay. Verificar en el panel que se muestran los dos servidores DNS asignados por Cloudflare
+- [x] 3.1 **(titular)** Crear la cuenta de Cloudflare y añadir `cublasercreative.es` en el plan Free. Revisar los registros DNS importados y borrar los de aparcamiento de DonDominio, si los hay. Verificar en el panel que se muestran los dos servidores DNS asignados por Cloudflare
 - [ ] 3.2 **(titular)** En DonDominio (Dominios → Gestionar dominio → DNS): comprobar si existe una entrada DNSSEC y eliminarla; después, «Editar servidores DNS» → personalizados, con los dos de Cloudflare. Verificar con `dig NS cublasercreative.es +short` que devuelve los servidores de Cloudflare y en el panel de Cloudflare que la zona está «Activa» (puede tardar de 6 a 12 horas)
-- [ ] 3.3 **(titular)** En Workers y Pages → Crear → Importar un repositorio, conectar GitHub y elegir `cub-laser-creative`:
+- [x] 3.3 **(titular)** En Workers y Pages → Crear → Importar un repositorio, conectar GitHub y elegir `cub-laser-creative`:
   - Nombre del Worker: `cub-laser-creative`.
   - Comando de build: `npm run build`.
   - Comando de despliegue: `npx wrangler deploy`.
