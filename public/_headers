@@ -1,0 +1,9 @@
+# Cabeceras de Cloudflare Workers (recursos estáticos). Astro copia este archivo a dist/.
+
+# Astro pone una huella del contenido en el nombre de todo lo que genera aquí:
+# se puede cachear para siempre. El HTML mantiene la revalidación por defecto.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*
+  X-Content-Type-Options: nosniff

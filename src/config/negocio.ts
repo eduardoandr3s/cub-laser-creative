@@ -28,10 +28,10 @@ const datosNegocio: z.input<typeof esquemaNegocio> = {
   redes: {},
   // Datos del titular para el aviso legal (obligatorios en España antes de publicar).
   legal: {
-    titular: undefined, // Nombre y apellidos o razón social
-    nif: undefined,
-    domicilio: undefined,
-    email: undefined,
+    titular: 'Claudia Urrutia Barrios', // Nombre y apellidos o razón social
+    nif: 'Z1170331G',
+    domicilio: 'Calle de Valencia, 58, 46410 Sueca (Valencia)',
+    email: 'hola@cublasercreative.es',
   },
 };
 

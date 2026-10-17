@@ -16,3 +16,6 @@ npm-debug.log*
 # OS / editor
 .DS_Store
 .idea/
+
+# Cloudflare Wrangler (estado local de `wrangler dev`)
+.wrangler/

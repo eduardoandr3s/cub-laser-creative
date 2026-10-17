@@ -10,22 +10,22 @@
 
 ## 2. Cambios en la web
 
-- [ ] 2.1 Poner `legal.email: 'hola@cublasercreative.es'` en `src/config/negocio.ts` y pedir al titular titular, NIF y domicilio. Si los da, añadirlos; si no, seguir y dejarlo anotado como pendiente. Verificar en `dist/aviso-legal/index.html` y `dist/privacidad/index.html` que aparece el correo y que el aviso del build solo nombra los campos que sigan faltando
-- [ ] 2.2 Actualizar `src/pages/privacidad.astro`: contacto por WhatsApp o por correo, y tratamiento de los mensajes de correo (Cloudflare los reenvía, Google/Gmail los almacena, Brevo envía las respuestas), manteniendo «sin cookies ni formularios». Verificar que la página generada contiene `hola@cublasercreative.es` y nombra los tres proveedores
-- [ ] 2.3 Poner `borrador: true` en los 5 trabajos de ejemplo. Verificar con `npm run build`:
+- [x] 2.1 Poner `legal.email: 'hola@cublasercreative.es'` en `src/config/negocio.ts` y pedir al titular titular, NIF y domicilio. Si los da, añadirlos; si no, seguir y dejarlo anotado como pendiente. Verificar en `dist/aviso-legal/index.html` y `dist/privacidad/index.html` que aparece el correo y que el aviso del build solo nombra los campos que sigan faltando
+- [x] 2.2 Actualizar `src/pages/privacidad.astro`: contacto por WhatsApp o por correo, y tratamiento de los mensajes de correo (Cloudflare los reenvía, Google/Gmail los almacena, Brevo envía las respuestas), manteniendo «sin cookies ni formularios». Verificar que la página generada contiene `hola@cublasercreative.es` y nombra los tres proveedores
+- [x] 2.3 Poner `borrador: true` en los 5 trabajos de ejemplo. Verificar con `npm run build`:
   - `/trabajos/` muestra el estado vacío con el botón de WhatsApp y no tiene filtro.
   - `/` no contiene «Trabajos destacados» y sí el hero, los diferenciales, los pasos y la llamada final.
   - No hay fichas ni páginas de categoría en `dist/`.
   - El sitemap solo contiene `/`, `/trabajos/`, `/aviso-legal/` y `/privacidad/`.
-- [ ] 2.4 Instalar `wrangler@^4.149` como dependencia de desarrollo y crear `wrangler.jsonc` según la decisión 1 del diseño. Verificar con `npx wrangler dev` sobre `dist/`:
+- [x] 2.4 Instalar `wrangler@^4.149` como dependencia de desarrollo y crear `wrangler.jsonc` según la decisión 1 del diseño. Verificar con `npx wrangler dev` sobre `dist/`:
   - `/trabajos` responde con un 307 a `/trabajos/`.
   - `/trabajos/` responde 200.
   - `/no-existe/` responde 404 con el contenido de la 404 del sitio.
-- [ ] 2.5 Crear `public/_headers` según la decisión 5 del diseño. Verificar con `npx wrangler dev`:
+- [x] 2.5 Crear `public/_headers` según la decisión 5 del diseño. Verificar con `npx wrangler dev`:
   - Un archivo de `/_astro/` lleva `Cache-Control: public, max-age=31536000, immutable`.
   - `/` mantiene `max-age=0, must-revalidate`.
   - Todas las respuestas llevan `X-Content-Type-Options: nosniff`.
-- [ ] 2.6 Reescribir la sección de publicación del README: Workers con Workers Builds, servidores DNS en DonDominio (con el aviso de DNSSEC), dominio, `www` y vuelta atrás. Añadir una sección «Correo hola@» (Email Routing, Brevo, Gmail «Enviar como», DMARC y su endurecimiento posterior a `p=quarantine`) y actualizar la lista previa al lanzamiento. Actualizar en `openspec/config.yaml` el hosting (Workers) y los videos (facade propia sobre `youtube-nocookie.com`). Verificar releyendo que ambos documentos ya no mencionan Pages ni astro-embed como opción vigente
+- [x] 2.6 Reescribir la sección de publicación del README: Workers con Workers Builds, servidores DNS en DonDominio (con el aviso de DNSSEC), dominio, `www` y vuelta atrás. Añadir una sección «Correo hola@» (Email Routing, Brevo, Gmail «Enviar como», DMARC y su endurecimiento posterior a `p=quarantine`) y actualizar la lista previa al lanzamiento. Actualizar en `openspec/config.yaml` el hosting (Workers) y los videos (facade propia sobre `youtube-nocookie.com`). Verificar releyendo que ambos documentos ya no mencionan Pages ni astro-embed como opción vigente
 - [ ] 2.7 Ejecutar `npm run verify`, hacer commit (sin coautoría) y push a `main`. Verificar que el build pasa y que el commit aparece en GitHub
 
 ## 3. Cloudflare y dominio

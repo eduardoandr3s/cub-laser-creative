@@ -1,0 +1,15 @@
+// Publicación en Cloudflare Workers con recursos estáticos, sin script propio:
+// todas las peticiones las sirve `dist/`, gratis y sin límite de tráfico.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Debe coincidir con el nombre del Worker en el panel de Cloudflare, o Workers Builds falla.
+  "name": "cub-laser-creative",
+  "compatibility_date": "2026-10-17",
+  "assets": {
+    "directory": "./dist",
+    // Rutas inexistentes: estado 404 con el contenido de dist/404.html.
+    "not_found_handling": "404-page",
+    // `/carpeta/` sirve carpeta/index.html y `/carpeta` redirige a `/carpeta/` (URLs con barra final).
+    "html_handling": "auto-trailing-slash"
+  }
+}

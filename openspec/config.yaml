@@ -17,12 +17,18 @@ context: |
   - Content Collections de Astro: cada trabajo es un archivo Markdown con frontmatter
     validado por schema (zod). Sin base de datos.
   - Imágenes locales optimizadas con el componente <Image>/<Picture> de Astro.
-  - Videos: YouTube embebido con patrón "facade" (lite-youtube / astro-embed),
-    nunca iframes cargados de inicio.
+  - Videos: YouTube embebido con patrón "facade" propio (componente VideoYouTube):
+    miniatura y botón, y el iframe de youtube-nocookie.com solo al pulsar.
+    Nunca iframes cargados de inicio.
   - Contacto: enlaces a WhatsApp (https://wa.me/<numero>?text=...), sin backend.
+  - Correo hola@cublasercreative.es, solo en las páginas legales: Cloudflare Email
+    Routing reenvía a Gmail; Gmail envía como hola@ por el SMTP de Brevo.
   - Node 22 (fijado en .nvmrc), npm como gestor de paquetes.
   - Desarrollo en local, sin contenedores.
-  - Hosting: Cloudflare Pages (build `npm run build`, salida `dist/`).
+  - Hosting: Cloudflare Workers con recursos estáticos, sin script propio
+    (`wrangler.jsonc`, build `npm run build`, salida `dist/`, cabeceras en
+    `public/_headers`). Workers Builds publica cada push a `main` y genera vistas
+    previas para las demás ramas. DNS del dominio en Cloudflare.
 
   ## Convenciones y restricciones
   - Coste de infraestructura mínimo: solo servicios gratuitos salvo el dominio.

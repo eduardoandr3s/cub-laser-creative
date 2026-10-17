@@ -9,7 +9,7 @@ const { legal } = negocio;
 
 <BaseLayout
   titulo="Política de privacidad"
-  descripcion={`Política de privacidad de ${negocio.nombre}: sin cookies ni formularios. Cómo tratamos los datos cuando nos escribes por WhatsApp.`}
+  descripcion={`Política de privacidad de ${negocio.nombre}: sin cookies ni formularios. Cómo tratamos los datos cuando nos escribes por WhatsApp o por correo.`}
 >
   <article class="contenedor py-10 sm:py-14">
     <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Política de privacidad</h1>
@@ -31,12 +31,13 @@ const { legal } = negocio;
         te pedimos ningún consentimiento al entrar.
       </p>
 
-      <h2>Contacto por WhatsApp</h2>
+      <h2>Contacto por WhatsApp o correo electrónico</h2>
       <p>
-        El contacto con {negocio.nombre} se realiza a través de WhatsApp. Al pulsar un botón de
-        WhatsApp se abre la aplicación con un mensaje prellenado, que solo se envía si tú decides
-        enviarlo. Si nos escribes, trataremos los datos que nos facilites (nombre, número de teléfono,
-        mensajes e imágenes) para:
+        El contacto con {negocio.nombre} se realiza a través de WhatsApp o del correo electrónico
+        <DatoLegal valor={legal.email} />. Al pulsar un botón de WhatsApp se abre la aplicación con un
+        mensaje prellenado, que solo se envía si tú decides enviarlo. Si nos escribes por cualquiera de
+        los dos canales, trataremos los datos que nos facilites (nombre, número de teléfono o dirección
+        de correo, mensajes, imágenes y archivos adjuntos) para:
       </p>
       <ul>
         <li>Responder a tu consulta y preparar presupuestos o bocetos (medidas precontractuales).</li>
@@ -45,9 +46,17 @@ const { legal } = negocio;
       </ul>
       <p>
         Conservaremos estos datos mientras dure la relación y, después, durante los plazos que exija
-        la ley. No los cederemos a terceros salvo obligación legal. WhatsApp (Meta) trata las
-        conversaciones según su propia política de privacidad.
+        la ley. No los cederemos a terceros salvo obligación legal. Para atender cada canal usamos
+        estos proveedores, que tratan los mensajes según sus propias políticas de privacidad:
       </p>
+      <ul>
+        <li><strong>WhatsApp (Meta)</strong>: las conversaciones de WhatsApp.</li>
+        <li>
+          <strong>Cloudflare</strong>: recibe los correos que nos envías y los reenvía a nuestro buzón.
+        </li>
+        <li><strong>Google (Gmail)</strong>: almacena los correos que recibimos y enviamos.</li>
+        <li><strong>Brevo</strong>: envía las respuestas que te mandamos por correo.</li>
+      </ul>
 
       <h2>Videos de YouTube</h2>
       <p>
