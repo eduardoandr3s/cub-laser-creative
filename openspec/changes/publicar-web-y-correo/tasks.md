@@ -36,7 +36,7 @@
   - Nombre del Worker: `cub-laser-creative`.
   - Comando de build: `npm run build`.
   - Comando de despliegue: `npx wrangler deploy`.
-  - Comando para las ramas que no son de producción: `npx wrangler versions upload`.
+  - Comando para las ramas que no son de producción: `npx wrangler versions upload`. _(18-10: el panel ya no ofrece este campo. Las ramas usan `npx wrangler preview`, en la pestaña «Base de vistas previas», y necesitan `"previews": {}` en `wrangler.jsonc`)_
 
   Verificar que el primer build termina bien, que su registro usa Node 22 (si no, añadir `NODE_VERSION=22` y repetir) y que la URL `*.workers.dev` sirve la portada
 - [x] 3.4 **(titular)** Añadir `cublasercreative.es` como *Custom Domain* del Worker y activar «Always Use HTTPS». Verificar:

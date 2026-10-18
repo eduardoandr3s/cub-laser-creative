@@ -199,21 +199,21 @@ npx wrangler dev
    - Nombre del Worker: `cub-laser-creative`.
    - Comando de build: `npm run build`.
    - Comando de despliegue: `npx wrangler deploy`.
-   - Comando para las ramas que no son de producción: `npx wrangler versions upload`.
+   - Vistas previas de las demás ramas: Cloudflare las configura solo, en la pestaña **Base de vistas previas** de **Configuración → Compilación**, con `npx wrangler preview`. Necesitan el bloque `previews` de `wrangler.jsonc` (ya está; sin él, el build de la rama falla).
    - Node: el build lee `.nvmrc` (22). Si el registro del primer build muestra otra versión, añade la variable `NODE_VERSION` = `22` y repite.
 
    Cuando termine, la web estará en `https://cub-laser-creative.<tu-cuenta>.workers.dev`.
-4. **Dominio y HTTPS**: en el Worker, **Configuración → Dominios y rutas** (Domains & Routes) → añade `cublasercreative.es` como dominio personalizado. Cloudflare crea el registro DNS y el certificado. Después, en **SSL/TLS → Certificados perimetrales**, activa **Usar siempre HTTPS** (Always Use HTTPS).
+4. **Dominio y HTTPS**: en el Worker, pestaña **Dominios** → **Añadir dominio** (no «Añadir ruta») → `cublasercreative.es`. Cloudflare crea el registro DNS y el certificado. Después, en **SSL/TLS → Certificados perimetrales**, activa **Usar siempre HTTPS** (Always Use HTTPS).
 5. **Redirección de `www`**:
    - En **DNS**, crea un registro `AAAA` con nombre `www`, contenido `100::` y proxy activado (nube naranja). Es un registro de relleno: la regla de redirección necesita que exista.
-   - En **Reglas → Crear regla → Regla de redirección**, usa la plantilla **«Redirect from WWW to root»** (301, conservando la ruta y los parámetros).
+   - En **Reglas**, usa la plantilla **«Redirigir de WWW a raíz»** (Redirect from WWW to root): 301, conservando la ruta y los parámetros.
    - Comprueba que `curl -sI https://www.cublasercreative.es/trabajos/` devuelve un 301 a `https://cublasercreative.es/trabajos/`.
-6. **Dirección `workers.dev`**: en **Dominios y rutas**, desactiva la ruta `workers.dev` de producción si el panel permite mantener activas las URL de vista previa. Si no se pueden separar, déjala activa: las URL canónicas apuntan a `cublasercreative.es` y Google no la trata como contenido duplicado.
+6. **Dirección `workers.dev`**: en la pestaña **Dominios**, desactiva la ruta `workers.dev` de producción si el panel permite mantener activas las URL de vista previa. Si no se pueden separar, déjala activa: las URL canónicas apuntan a `cublasercreative.es` y Google no la trata como contenido duplicado.
 
 ### Día a día
 
 - Cada push a `main` genera y publica la web en unos minutos.
-- Cada push a otra rama genera una **URL de vista previa** propia (aparece en el build del panel), sin tocar la web publicada.
+- Cada push a otra rama genera una **URL de vista previa** propia, `https://<rama>-cub-laser-creative.cublasercreative.workers.dev`, sin tocar la web publicada. No la indexan los buscadores.
 - Si el build falla (una categoría que no existe, una foto que falta, un número de WhatsApp inválido…), no se publica nada y la web sigue como estaba. El error aparece en el registro del build, en el panel.
 
 **Volver a una versión anterior:** en el Worker, pestaña **Implementaciones** (Deployments), elige una versión anterior y pulsa **Revertir** (Rollback). No hace falta volver a generar la web. Para recuperar la última, haz lo mismo con ella o un nuevo push a `main`.

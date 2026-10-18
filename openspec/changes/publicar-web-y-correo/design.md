@@ -40,7 +40,7 @@ No hay `main`: sin script, todas las peticiones las sirven los recursos estátic
 
 ### 2. Despliegue con Workers Builds conectado a GitHub
 - Producción: rama `main`, con el comando de build `npm run build` y el de despliegue `npx wrangler deploy`.
-- Otras ramas: `npx wrangler versions upload`, que genera una URL de vista previa sin tocar producción.
+- Otras ramas: `npx wrangler preview` (Worker Previews, en beta abierta), que publica cada rama en `<rama>-cub-laser-creative.<subdominio>.workers.dev` sin tocar producción. Exige un bloque `previews` en `wrangler.jsonc`, que puede ir vacío. _(Corregido el 18-10: el plan decía `npx wrangler versions upload`, pero el panel ya no lo ofrece a los Workers nuevos.)_
 - Si el build falla (contenido inválido, número de WhatsApp incorrecto…), no se despliega nada y sigue la versión anterior. Así se cumple el requisito sin lógica adicional.
 - `wrangler` se añade como dependencia de desarrollo (`^4.149`), para que el build en la nube y el titular en local usen la misma versión. Además permite `npx wrangler dev` (probar en local con el mismo enrutado que en producción) y `npx wrangler deploy` (desplegar a mano si Workers Builds fallara).
 - Node: se espera que el build lea `.nvmrc` (22); se comprobará en el primer registro de build. Si no lo hace, se define la variable `NODE_VERSION=22` en el panel.

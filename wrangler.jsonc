@@ -11,5 +11,8 @@
     "not_found_handling": "404-page",
     // `/carpeta/` sirve carpeta/index.html y `/carpeta` redirige a `/carpeta/` (URLs con barra final).
     "html_handling": "auto-trailing-slash"
-  }
+  },
+  // Necesario para `wrangler preview`, el comando con el que Workers Builds publica las ramas
+  // que no son `main` como vistas previas. Vacío: usan la misma configuración que producción.
+  "previews": {}
 }
