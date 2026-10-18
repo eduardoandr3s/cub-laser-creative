@@ -31,7 +31,7 @@
 ## 3. Cloudflare y dominio
 
 - [x] 3.1 **(titular)** Crear la cuenta de Cloudflare y añadir `cublasercreative.es` en el plan Free. Revisar los registros DNS importados y borrar los de aparcamiento de DonDominio, si los hay. Verificar en el panel que se muestran los dos servidores DNS asignados por Cloudflare
-- [ ] 3.2 **(titular)** En DonDominio (Dominios → Gestionar dominio → DNS): comprobar si existe una entrada DNSSEC y eliminarla; después, «Editar servidores DNS» → personalizados, con los dos de Cloudflare. Verificar con `dig NS cublasercreative.es +short` que devuelve los servidores de Cloudflare y en el panel de Cloudflare que la zona está «Activa» (puede tardar de 6 a 12 horas)
+- [x] 3.2 **(titular)** En DonDominio (Dominios → Gestionar dominio → DNS): comprobar si existe una entrada DNSSEC y eliminarla; después, «Editar servidores DNS» → personalizados, con los dos de Cloudflare. Verificar con `dig NS cublasercreative.es +short` que devuelve los servidores de Cloudflare y en el panel de Cloudflare que la zona está «Activa» (puede tardar de 6 a 12 horas)
 - [x] 3.3 **(titular)** En Workers y Pages → Crear → Importar un repositorio, conectar GitHub y elegir `cub-laser-creative`:
   - Nombre del Worker: `cub-laser-creative`.
   - Comando de build: `npm run build`.
@@ -39,11 +39,11 @@
   - Comando para las ramas que no son de producción: `npx wrangler versions upload`.
 
   Verificar que el primer build termina bien, que su registro usa Node 22 (si no, añadir `NODE_VERSION=22` y repetir) y que la URL `*.workers.dev` sirve la portada
-- [ ] 3.4 **(titular)** Añadir `cublasercreative.es` como *Custom Domain* del Worker y activar «Always Use HTTPS». Verificar:
+- [x] 3.4 **(titular)** Añadir `cublasercreative.es` como *Custom Domain* del Worker y activar «Always Use HTTPS». Verificar:
   - `curl -sI https://cublasercreative.es/` devuelve 200 con certificado válido.
   - `curl -sI http://cublasercreative.es/trabajos/` redirige a `https://cublasercreative.es/trabajos/`.
-- [ ] 3.5 **(titular)** Crear el registro `www` (`AAAA` → `100::`, con proxy activado) y la *Redirect Rule* «Redirect from WWW to root» (301, conservando ruta y parámetros). Verificar que `curl -sI 'https://www.cublasercreative.es/trabajos/?ref=whatsapp'` devuelve 301 a `https://cublasercreative.es/trabajos/?ref=whatsapp`
-- [ ] 3.6 Comprobar los requisitos de `publicacion-sitio` sobre el dominio con `curl`:
+- [x] 3.5 **(titular)** Crear el registro `www` (`AAAA` → `100::`, con proxy activado) y la *Redirect Rule* «Redirect from WWW to root» (301, conservando ruta y parámetros). Verificar que `curl -sI 'https://www.cublasercreative.es/trabajos/?ref=whatsapp'` devuelve 301 a `https://cublasercreative.es/trabajos/?ref=whatsapp`
+- [x] 3.6 Comprobar los requisitos de `publicacion-sitio` sobre el dominio con `curl`:
   - `/trabajos` → 307 a `/trabajos/`.
   - `/trabajos/no-existe/` → 404 con la página 404.
   - Cabeceras de caché en `/_astro/*` y en `/`.
