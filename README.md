@@ -194,6 +194,7 @@ npx wrangler dev
    - **Primero, DNSSEC**: si hay una entrada DNSSEC, elimínala. Si la dejas, el dominio deja de funcionar para muchos usuarios al cambiar de servidores.
    - Después, **Editar servidores DNS** → servidores personalizados, con los dos de Cloudflare.
    - El cambio tarda de 6 a 12 horas. Espera a que Cloudflare marque la zona como **Activa** antes de seguir. Compruébalo con `dig NS cublasercreative.es +short`.
+   - Si después la web no carga desde tu red, pero sí con `dig cublasercreative.es @1.1.1.1`, tu DNS (a menudo el de Google, 8.8.8.8) sigue con los datos de DonDominio. Vacía su caché en <https://dns.google/cache> (tipos NS, A y AAAA) o espera hasta 24 horas.
    - Cuando esté activa puedes volver a activar DNSSEC desde Cloudflare (DNS → Configuración) y copiar su registro DS en DonDominio («Crear entrada DNSSEC»). Es opcional.
 3. **Worker conectado a GitHub**: en **Workers y Pages → Crear → Importar un repositorio**, autoriza GitHub y elige `cub-laser-creative`:
    - Nombre del Worker: `cub-laser-creative`.

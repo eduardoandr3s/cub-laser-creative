@@ -49,12 +49,14 @@
   - Cabeceras de caché en `/_astro/*` y en `/`.
 
   Pasar Lighthouse móvil a `https://cublasercreative.es/` y verificar que las cuatro categorías puntúan 90 o más
-- [ ] 3.7 Comprobar la publicación automática, las vistas previas y la vuelta atrás:
+- [x] 3.7 Comprobar la publicación automática, las vistas previas y la vuelta atrás:
   1. Subir una rama de prueba con un cambio visible y verificar que genera una URL de vista previa y que el dominio no cambia.
   2. Subir a `main` un cambio de texto y verificar que aparece en el dominio.
   3. Subir a `main` un commit con una categoría inexistente: verificar que el build falla y que el sitio sigue igual; después, revertirlo.
   4. Restaurar un despliegue anterior en el panel, verificar que el dominio lo sirve y volver al último.
   5. Borrar la rama de prueba.
+
+  _(18-10: hecho. La vista previa exigió añadir `"previews": {}` a `wrangler.jsonc`. El build con la categoría inexistente falló y la versión activa no cambió. Vuelta atrás a `dd2ea016` y regreso a `aefd85e9` desde el panel. Rama y vista previa borradas con `git push --delete` y `npx wrangler preview delete`.)_
 - [ ] 3.8 **(titular)** Intentar desactivar la ruta `*.workers.dev` de producción manteniendo las URLs de vista previa. Verificar que la vista previa de una rama sigue funcionando; si no se puede separar, dejar la ruta activa y anotarlo en el README
 
 ## 4. Correo
