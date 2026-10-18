@@ -115,6 +115,7 @@ Todo lo que hay en el repositorio ya es público en la web (WhatsApp, y los dato
 - [Los primeros correos reenviados caen en Spam de Gmail] → Filtro «No enviar nunca a Spam» y marcar «No es spam» las primeras veces.
 - [Límite de Brevo (300 al día) o cambios en su plan gratuito] → Es de sobra para un negocio artesanal. Si cambiara, el SMTP se sustituye en Gmail sin tocar la web ni Email Routing.
 - [La clave SMTP de Brevo se filtra] → Solo se guarda en Gmail. Si se sospecha, se revoca en Brevo y se genera otra.
+- [Brevo añade a cada correo un píxel de apertura y la cabecera `List-Unsubscribe`, y en el plan gratuito no se pueden quitar] → Comprobado el 18-10 en la prueba de la tarea 4.6. El titular decide seguir con Brevo; la alternativa estudiada era Resend, sin seguimiento por defecto. Si un cliente pulsa «Cancelar suscripción», Brevo lo bloquea y no le llegan las respuestas: el README explica cómo desbloquearlo.
 - [Workers Builds no lee `.nvmrc`] → Variable `NODE_VERSION=22` en el panel (decisión 2).
 - [La redirección 307 de las rutas sin barra es temporal] → Los enlaces internos, el sitemap y las canónicas usan siempre la barra final, así que los buscadores apenas ven esas redirecciones.
 - [Lanzar con la galería vacía] → Es un estado diseñado (WhatsApp como llamada a la acción). El README explica cómo publicar los primeros trabajos.

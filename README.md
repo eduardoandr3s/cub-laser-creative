@@ -279,4 +279,5 @@ Escribe a `hola@` desde una cuenta externa y respóndele desde Gmail como `hola@
 ### Después del lanzamiento
 
 - **Endurecer DMARC**: tras 2–4 semanas de informes limpios en la Administración de DMARC de Cloudflare (todo lo legítimo pasa), cambia la política a `p=quarantine`. Así los correos que suplanten `cublasercreative.es` irán a spam.
+- **Si un cliente no recibe tus respuestas**: Brevo añade a cada correo un enlace oculto de baja (`List-Unsubscribe`), y Gmail puede mostrar «Cancelar suscripción». Si el cliente lo pulsa, Brevo lo bloquea. Búscalo en Brevo, en los contactos bloqueados del correo transaccional, y desbloquéalo. Brevo también añade un píxel que registra cuándo se abre cada correo; en el plan gratuito no se puede quitar.
 - **Vuelta atrás**: para dejar de recibir, desactiva Email Routing o borra la regla de `hola@`. Para dejar de enviar como `hola@`, quita la dirección en Gmail «Enviar como».
