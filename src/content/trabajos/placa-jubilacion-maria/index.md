@@ -1,7 +1,7 @@
 ---
 titulo: Placa conmemorativa para la jubilación de María
 descripcion: Placa de madera grabada con láser como regalo de despedida de sus compañeros tras 30 años de trabajo.
-categoria: no-existe
+categoria: placas
 fecha: 2026-06-14
 borrador: true
 portada:
