@@ -57,7 +57,7 @@
   5. Borrar la rama de prueba.
 
   _(18-10: hecho. La vista previa exigió añadir `"previews": {}` a `wrangler.jsonc`. El build con la categoría inexistente falló y la versión activa no cambió. Vuelta atrás a `dd2ea016` y regreso a `aefd85e9` desde el panel. Rama y vista previa borradas con `git push --delete` y `npx wrangler preview delete`.)_
-- [ ] 3.8 **(titular)** Intentar desactivar la ruta `*.workers.dev` de producción manteniendo las URLs de vista previa. Verificar que la vista previa de una rama sigue funcionando; si no se puede separar, dejar la ruta activa y anotarlo en el README
+- [x] 3.8 **(titular)** Intentar desactivar la ruta `*.workers.dev` de producción manteniendo las URLs de vista previa. Verificar que la vista previa de una rama sigue funcionando; si no se puede separar, dejar la ruta activa y anotarlo en el README _(18-10: hecho en `wrangler.jsonc` con `"workers_dev": false` y `"preview_urls": true`, no en el panel. La dirección de producción en `workers.dev` devuelve el error 1042 de Cloudflare. La vista previa de una rama de prueba siguió funcionando; después se borraron la rama y la vista previa)_
 
 ## 4. Correo
 
