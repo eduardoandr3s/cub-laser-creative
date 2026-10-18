@@ -250,10 +250,16 @@ El correo solo aparece en el aviso legal y en la política de privacidad; el con
    - En Gmail, crea un filtro **«Para: hola@cublasercreative.es» → No enviar nunca a Spam**. Las primeras semanas, marca como «No es spam» lo que caiga ahí.
 2. **Brevo**:
    - Crea una cuenta gratuita en <https://www.brevo.com> con `hola@cublasercreative.es` (los correos de alta ya llegan al Gmail).
-   - En **Remitentes, dominios e IP dedicadas → Dominios**, añade `cublasercreative.es` y autentícalo con los registros que indique Brevo (código de verificación y DKIM). Si ofrece configurarlo automáticamente con Cloudflare, úsalo.
-   - **Un solo SPF**: si Brevo pide añadir su `include` al SPF, edita el registro existente en vez de crear otro. Debe quedar uno solo: `v=spf1 include:_spf.mx.cloudflare.net include:spf.brevo.com ~all`.
+   - En **Remitentes, dominios e IP dedicadas → Dominios**, añade `cublasercreative.es` y acepta la configuración automática con Cloudflare. Crea:
+     - El TXT `brevo-code:…` en la raíz.
+     - Los CNAME de DKIM `brevo1` y `brevo2._domainkey`.
+     - El DMARC `_dmarc` (`p=none`, informes a Brevo).
+     - Los CNAME `r` e `img`, para enlaces e imágenes con tu dominio.
+
+     No toca el SPF: Brevo ya no lo pide.
+   - **Un solo SPF**: si algún día Brevo pidiera añadir su `include`, edita el registro existente en vez de crear otro. Debe quedar uno solo.
    - En **SMTP y API**, genera una **clave SMTP** y apunta también el **login SMTP**.
-3. **DMARC** (Cloudflare → **Correo electrónico → Administración de DMARC**): actívalo para publicar `_dmarc` con `v=DMARC1; p=none` y los informes en Cloudflare, para que no lleguen al Gmail.
+3. **DMARC** (Cloudflare → **Correo electrónico → Administración de DMARC**): actívalo. Detecta el `_dmarc` que creó Brevo y le **añade** su dirección de informes, sin crear otro registro: `v=DMARC1; p=none; rua=mailto:…@dmarc-reports.cloudflare.net,mailto:rua@dmarc.brevo.com`. Los informes no llegan al Gmail. Los avisos del panel son normales al empezar: «Política de DMARC: Ninguno», «SPF: error recuperable» (`~all`) y «BIMI: no».
 4. **Gmail «Enviar como»** (Configuración → Ver todos los ajustes → **Cuentas e importación → Enviar como → Añadir otra dirección de correo electrónico**):
    - Nombre: `CUB Laser Creative`; dirección: `hola@cublasercreative.es`.
    - Servidor SMTP: `smtp-relay.brevo.com`, puerto `587`, conexión segura con **TLS**. Usuario: el login SMTP de Brevo; contraseña: la clave SMTP.
