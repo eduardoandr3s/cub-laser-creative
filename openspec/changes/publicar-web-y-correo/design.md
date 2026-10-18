@@ -56,7 +56,7 @@ Se añade la zona `cublasercreative.es` al plan Free de Cloudflare y se cambian 
 - **Dominio raíz**: se añade `cublasercreative.es` como *Custom Domain* del Worker. Cloudflare crea el registro DNS y el certificado.
 - **www**: se crea un registro `www` con proxy activado, del tipo `AAAA` a `100::` (el registro de relleno habitual para que una regla de Cloudflare tenga algo que interceptar), y una *Redirect Rule* con la plantilla «Redirect from WWW to root»: 301 que conserva la ruta y los parámetros. No se añade `www` como dominio del Worker, para no servir contenido duplicado.
 - **HTTPS**: se activa «Always Use HTTPS». HSTS queda fuera de alcance.
-- **workers.dev**: se intenta desactivar la ruta `*.workers.dev` de producción, manteniendo las URLs de vista previa. Si el panel no permite separarlas, se deja activa: las canónicas ya apuntan a `cublasercreative.es`, así que no hay penalización por contenido duplicado.
+- **workers.dev**: se desactiva la ruta `*.workers.dev` de producción y se mantienen las URLs de vista previa, con `"workers_dev": false` y `"preview_urls": true` en `wrangler.jsonc`. _(Corregido el 18-10: el plan era hacerlo en el panel, pero `wrangler deploy` vuelve a aplicar lo que diga la configuración, y `workers_dev` vale `true` por defecto.)_
 
 ### 5. Caché con `public/_headers`
 ```

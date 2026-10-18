@@ -203,13 +203,13 @@ npx wrangler dev
    - Vistas previas de las demás ramas: Cloudflare las configura solo, en la pestaña **Base de vistas previas** de **Configuración → Compilación**, con `npx wrangler preview`. Necesitan el bloque `previews` de `wrangler.jsonc` (ya está; sin él, el build de la rama falla).
    - Node: el build lee `.nvmrc` (22). Si el registro del primer build muestra otra versión, añade la variable `NODE_VERSION` = `22` y repite.
 
-   Cuando termine, la web estará en `https://cub-laser-creative.<tu-cuenta>.workers.dev`.
+   Cuando termine, el build aparecerá como correcto, pero la web todavía no se verá: `wrangler.jsonc` desactiva la dirección `workers.dev` de producción. Se verá en el dominio tras el paso 4.
 4. **Dominio y HTTPS**: en el Worker, pestaña **Dominios** → **Añadir dominio** (no «Añadir ruta») → `cublasercreative.es`. Cloudflare crea el registro DNS y el certificado. Después, en **SSL/TLS → Certificados perimetrales**, activa **Usar siempre HTTPS** (Always Use HTTPS).
 5. **Redirección de `www`**:
    - En **DNS**, crea un registro `AAAA` con nombre `www`, contenido `100::` y proxy activado (nube naranja). Es un registro de relleno: la regla de redirección necesita que exista.
    - En **Reglas**, usa la plantilla **«Redirigir de WWW a raíz»** (Redirect from WWW to root): 301, conservando la ruta y los parámetros.
    - Comprueba que `curl -sI https://www.cublasercreative.es/trabajos/` devuelve un 301 a `https://cublasercreative.es/trabajos/`.
-6. **Dirección `workers.dev`**: en la pestaña **Dominios**, desactiva la ruta `workers.dev` de producción si el panel permite mantener activas las URL de vista previa. Si no se pueden separar, déjala activa: las URL canónicas apuntan a `cublasercreative.es` y Google no la trata como contenido duplicado.
+6. **Dirección `workers.dev`**: no hay que tocar nada. `wrangler.jsonc` la desactiva para producción (`workers_dev: false`) y la mantiene para las vistas previas (`preview_urls: true`). No la cambies en el panel: el siguiente despliegue la dejaría otra vez como dice `wrangler.jsonc`.
 
 ### Día a día
 

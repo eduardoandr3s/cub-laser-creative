@@ -5,6 +5,10 @@
   // Debe coincidir con el nombre del Worker en el panel de Cloudflare, o Workers Builds falla.
   "name": "cub-laser-creative",
   "compatibility_date": "2026-10-17",
+  // Producción solo en cublasercreative.es: sin la copia en cub-laser-creative.<cuenta>.workers.dev.
+  // Las vistas previas de las ramas siguen en workers.dev; se configuran aparte.
+  "workers_dev": false,
+  "preview_urls": true,
   "assets": {
     "directory": "./dist",
     // Rutas inexistentes: estado 404 con el contenido de dist/404.html.
