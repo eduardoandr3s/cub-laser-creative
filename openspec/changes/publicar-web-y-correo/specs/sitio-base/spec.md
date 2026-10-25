@@ -8,7 +8,7 @@ La página `/` SHALL mostrar, en este orden:
 2. **¿Por qué CUB Laser Creative?**: los diferenciales del negocio (por ejemplo, corte láser de precisión e impresión a todo color sobre madera real), cada uno con icono, título y texto breve.
 3. **Trabajos destacados**: la selección de destacados en tarjetas con el mismo formato que la galería y un enlace a `/trabajos/`. Si no hay ningún trabajo publicado, esta sección MUST NOT mostrarse, ni siquiera su título.
 4. **Cómo encargar tu diseño**: pasos numerados del proceso de pedido, desde el primer mensaje hasta la entrega.
-5. **Llamada final** para contactar por WhatsApp.
+5. **Llamada final** para contactar por WhatsApp. Debajo del botón SHALL mostrarse las redes configuradas como enlaces secundarios (solo icono), de modo que WhatsApp siga siendo la acción destacada. Si no hay ninguna red configurada, ese bloque MUST NOT mostrarse.
 
 Los textos de estas secciones (titular, diferenciales y pasos) SHALL editarse en un único archivo de contenido, separado de los componentes.
 

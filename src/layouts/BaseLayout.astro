@@ -5,12 +5,9 @@ import MapPin from '@lucide/astro/icons/map-pin';
 import Logo from '../components/Logo.astro';
 import SEO, { type ImagenSEO } from '../components/SEO.astro';
 import WhatsAppFlotante from '../components/WhatsAppFlotante.astro';
-import Facebook from '../components/iconos/Facebook.astro';
-import Instagram from '../components/iconos/Instagram.astro';
-import TikTok from '../components/iconos/TikTok.astro';
 import WhatsApp from '../components/iconos/WhatsApp.astro';
-import YouTube from '../components/iconos/YouTube.astro';
 import { negocio, whatsappActivo } from '../config/negocio';
+import { redes } from '../config/redes';
 import { enlaceWhatsApp } from '../lib/whatsapp';
 
 interface Props {
@@ -34,12 +31,6 @@ const navegacion = [
     actual: ruta === '/trabajos/' ? 'page' : ruta.startsWith('/trabajos/') ? 'true' : undefined,
   },
 ] as const;
-
-const iconosRedes = { instagram: Instagram, tiktok: TikTok, facebook: Facebook, youtube: YouTube };
-const nombresRedes = { instagram: 'Instagram', tiktok: 'TikTok', facebook: 'Facebook', youtube: 'YouTube' };
-const redes = (Object.keys(iconosRedes) as (keyof typeof iconosRedes)[])
-  .filter((red) => negocio.redes[red])
-  .map((red) => ({ url: negocio.redes[red]!, nombre: nombresRedes[red], Icono: iconosRedes[red] }));
 
 const pais = new Intl.DisplayNames(['es'], { type: 'region' }).of(negocio.ubicacion.pais);
 const anio = new Date().getFullYear();
