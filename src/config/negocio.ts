@@ -23,9 +23,13 @@ const datosNegocio: z.input<typeof esquemaNegocio> = {
     numero: '34662368153',
     mensajeGenerico: 'Hola, me gustaría pedir información sobre un diseño personalizado.',
   },
-  // Solo se muestran las redes que tengan URL. Ejemplo:
-  // instagram: 'https://www.instagram.com/cublasercreative/',
-  redes: {},
+  // Solo se muestran las redes que tengan URL (instagram, tiktok, facebook, youtube).
+  redes: {
+    instagram: 'https://www.instagram.com/cublasercreative/',
+    tiktok: 'https://www.tiktok.com/@cub.laser.creative',
+    // @CUBLáserCreative: la «á» va codificada como %C3%A1, igual que en YouTube.
+    youtube: 'https://www.youtube.com/@CUBL%C3%A1serCreative',
+  },
   // Datos del titular para el aviso legal (obligatorios en España antes de publicar).
   legal: {
     titular: 'Claudia Urrutia Barrios', // Nombre y apellidos o razón social

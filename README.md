@@ -166,7 +166,7 @@ El logotipo de la cabecera es texto con el degradado de la marca (`src/component
 - [ ] **Textos legales**: revisa `/aviso-legal/` y `/privacidad/`. Son una base estándar; conviene que los revise un profesional.
 - [x] **URL**: `url` en `src/config/negocio.ts` es la definitiva (`https://cublasercreative.es`).
 - [x] **Ejemplos**: los 5 trabajos de ejemplo están en borrador, así que la web se publica con la galería vacía («Muy pronto» y el botón de WhatsApp) y sin «Trabajos destacados» en la portada. Cuando tengas trabajos reales, añádelos y borra las carpetas de ejemplo de `src/content/trabajos/` (`llaveros-boda-ana-luis`, `placa-jubilacion-maria`, `logo-corporativo-cafeteria`, `recuerdos-comunion-lucia` y `marco-familia-garcia`).
-- [ ] **Redes**: añade las URL de las redes que tengas.
+- [x] **Redes**: Instagram, TikTok y YouTube en `redes`. Facebook queda vacío hasta que haya página.
 - [ ] **Textos de inicio**: revisa `src/config/inicio.ts`.
 - [ ] **Correo**: `hola@cublasercreative.es` recibe y envía (ver [Correo hola@](#correo-hola)).
 - [ ] `npm run verify` termina sin errores.
