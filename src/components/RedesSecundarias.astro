@@ -1,0 +1,43 @@
+---
+// Redes debajo de un botón de WhatsApp. Van en segundo plano (solo icono, sin relleno)
+// para que WhatsApp siga siendo la acción principal. Sin redes configuradas no se muestra.
+import { redes } from '../config/redes';
+
+interface Props {
+  /** Colores para fondo oscuro (`.tema-oscuro`). */
+  oscuro?: boolean;
+  /** Para centrar el bloque, pasa `items-center`. */
+  class?: string;
+}
+
+const { oscuro = false, class: clase } = Astro.props;
+---
+
+{
+  redes.length > 0 && (
+    <div class:list={['flex flex-col gap-3', clase]}>
+      <p class:list={['text-sm', oscuro ? 'text-papel/70' : 'text-tinta-suave']}>También nos encuentras en</p>
+      <ul class="flex gap-3">
+        {redes.map(({ url, nombre, Icono }) => (
+          <li>
+            <a
+              href={url}
+              target="_blank"
+              rel="noopener"
+              aria-label={nombre}
+              title={nombre}
+              class:list={[
+                'inline-flex size-11 items-center justify-center rounded-full ring-1 transition-colors',
+                oscuro
+                  ? 'text-papel/75 ring-papel/25 hover:bg-papel/10 hover:text-papel'
+                  : 'text-tinta-suave ring-tinta/20 hover:bg-tinta/5 hover:text-tinta',
+              ]}
+            >
+              <Icono class="size-5" />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}

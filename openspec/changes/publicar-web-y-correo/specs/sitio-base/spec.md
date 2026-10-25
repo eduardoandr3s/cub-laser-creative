@@ -8,7 +8,7 @@ La página `/` SHALL mostrar, en este orden:
 2. **¿Por qué CUB Laser Creative?**: los diferenciales del negocio (por ejemplo, corte láser de precisión e impresión a todo color sobre madera real), cada uno con icono, título y texto breve.
 3. **Trabajos destacados**: la selección de destacados en tarjetas con el mismo formato que la galería y un enlace a `/trabajos/`. Si no hay ningún trabajo publicado, esta sección MUST NOT mostrarse, ni siquiera su título.
 4. **Cómo encargar tu diseño**: pasos numerados del proceso de pedido, desde el primer mensaje hasta la entrega.
-5. **Llamada final** para contactar por WhatsApp. Debajo del botón SHALL mostrarse las redes configuradas como enlaces secundarios (solo icono), de modo que WhatsApp siga siendo la acción destacada. Si no hay ninguna red configurada, ese bloque MUST NOT mostrarse.
+5. **Llamada final** para contactar por WhatsApp.
 
 Los textos de estas secciones (titular, diferenciales y pasos) SHALL editarse en un único archivo de contenido, separado de los componentes.
 
@@ -38,3 +38,16 @@ El sitio SHALL publicar `/aviso-legal/` y `/privacidad/`, generadas con los dato
 #### Scenario: Contacto por correo en la política de privacidad
 - **WHEN** el visitante lee `/privacidad/`
 - **THEN** encuentra el correo `hola@cublasercreative.es` como canal de contacto junto a WhatsApp, y los proveedores que tratan los mensajes de correo
+
+## ADDED Requirements
+
+### Requirement: Redes junto a los botones de WhatsApp
+La llamada final de la página de inicio y la ficha de cada trabajo SHALL mostrar, debajo de su botón de WhatsApp, las redes configuradas como enlaces secundarios: solo icono, sin relleno, con nombre accesible y un área táctil mínima de 44×44 px. El botón de WhatsApp SHALL seguir siendo la acción destacada. Si no hay ninguna red configurada, ese bloque MUST NOT mostrarse.
+
+#### Scenario: Redes en la ficha de un trabajo
+- **WHEN** Instagram y TikTok están configurados y el visitante abre la ficha de un trabajo
+- **THEN** debajo del botón "Quiero algo así" ve los iconos de Instagram y TikTok, y cada uno abre su perfil en una pestaña nueva
+
+#### Scenario: Sin redes configuradas
+- **WHEN** no hay ninguna red configurada
+- **THEN** ni la llamada final de inicio ni las fichas de trabajo muestran el bloque de redes

@@ -1,7 +1,7 @@
 ---
 import { inicio } from '../../config/inicio';
-import { redes } from '../../config/redes';
 import BotonWhatsApp from '../BotonWhatsApp.astro';
+import RedesSecundarias from '../RedesSecundarias.astro';
 ---
 
 <section aria-labelledby="titulo-cta" class="contenedor">
@@ -11,30 +11,7 @@ import BotonWhatsApp from '../BotonWhatsApp.astro';
     </h2>
     <p class="mx-auto mt-3 max-w-xl text-lg text-papel/85">{inicio.ctaFinal.texto}</p>
     <BotonWhatsApp class="mt-8" />
-    <!-- Las redes van en segundo plano (solo icono, sin relleno): WhatsApp es la acción principal. -->
-    {
-      redes.length > 0 && (
-        <div class="mt-8">
-          <p class="text-sm text-papel/70">También nos encuentras en</p>
-          <ul class="mt-3 flex justify-center gap-3">
-            {redes.map(({ url, nombre, Icono }) => (
-              <li>
-                <a
-                  href={url}
-                  target="_blank"
-                  rel="noopener"
-                  aria-label={nombre}
-                  title={nombre}
-                  class="inline-flex size-11 items-center justify-center rounded-full text-papel/75 ring-1 ring-papel/25 transition-colors hover:bg-papel/10 hover:text-papel"
-                >
-                  <Icono class="size-5" />
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )
-    }
+    <RedesSecundarias oscuro class="mt-8 items-center" />
     <div aria-hidden="true" class="franja-cmyk absolute inset-x-0 bottom-0 h-1.5"></div>
   </div>
 </section>

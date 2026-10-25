@@ -5,6 +5,7 @@ import { getEntry, render } from 'astro:content';
 import ArrowLeft from '@lucide/astro/icons/arrow-left';
 import BotonWhatsApp from '../../components/BotonWhatsApp.astro';
 import GrillaTrabajos from '../../components/GrillaTrabajos.astro';
+import RedesSecundarias from '../../components/RedesSecundarias.astro';
 import VideoYouTube from '../../components/VideoYouTube.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getTrabajosPublicados, seleccionarRelacionados } from '../../lib/trabajos';
@@ -90,6 +91,7 @@ const imagenOG = await getImage({ src: portada.src, width: anchoOG, format: 'jpe
           <Content />
         </div>
         <BotonWhatsApp texto="Quiero algo así" mensaje={mensaje} class="mt-8" />
+        <RedesSecundarias class="mt-6" />
       </div>
     </div>
 
