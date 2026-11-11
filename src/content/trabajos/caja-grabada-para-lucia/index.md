@@ -5,8 +5,8 @@ categoria: empresas
 fecha: 2026-11-11
 borrador: true
 portada:
-  src: ./foto-1.jpg
-  alt: Caja de madera grabada
+  src: ./foto-2.jpg
+  alt: Otra caja
 ---
 
 
