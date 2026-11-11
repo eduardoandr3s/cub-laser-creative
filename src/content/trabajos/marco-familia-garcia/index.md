@@ -4,9 +4,17 @@ descripcion: Marco de fotos de madera con el apellido familiar grabado con láse
 categoria: marcos
 fecha: 2026-10-01
 borrador: true
+material: DM de 3 mm (prueba del panel)
 portada:
   src: ./portada.jpg
   alt: Marco de fotos de madera con el apellido García grabado
+imagenes:
+  - src: ./foto-1.jpg
+    alt: Foto de prueba subida desde el panel
+videos:
+  - https://www.youtube.com/shorts/l21d-CaAqSY
+instagram:
+  - https://www.instagram.com/p/DfIaEXrt41_/?igsh=abc
 ---
 
 **Trabajo de ejemplo en borrador: solo se ve con `npm run dev`.**
