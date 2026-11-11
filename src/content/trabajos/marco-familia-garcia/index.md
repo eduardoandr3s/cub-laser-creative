@@ -3,7 +3,6 @@ titulo: Marco personalizado para la familia García
 descripcion: Marco de fotos de madera con el apellido familiar grabado con láser y detalles a todo color.
 categoria: marcos
 fecha: 2026-10-01
-borrador: true
 material: Cambio desde la pestaña A
 portada:
   src: ./foto-1.jpg
