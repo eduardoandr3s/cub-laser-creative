@@ -6,11 +6,13 @@ fecha: 2026-10-01
 borrador: true
 material: DM de 3 mm (prueba del panel)
 portada:
-  src: ./portada.jpg
-  alt: Marco de fotos de madera con el apellido García grabado
+  src: ./foto-1.jpg
+  alt: Foto de prueba subida desde el panel
 imagenes:
-  - src: ./foto-1.jpg
-    alt: Foto de prueba subida desde el panel
+  - src: ./foto-3.jpg
+    alt: Tercera foto
+  - src: ./foto-2.jpg
+    alt: Segunda foto
 videos:
   - https://www.youtube.com/shorts/l21d-CaAqSY
 instagram:
