@@ -4,7 +4,7 @@ descripcion: Marco de fotos de madera con el apellido familiar grabado con láse
 categoria: marcos
 fecha: 2026-10-01
 borrador: true
-material: DM de 3 mm (prueba del panel)
+material: Cambio desde la pestaña A
 portada:
   src: ./foto-1.jpg
   alt: Foto de prueba subida desde el panel
