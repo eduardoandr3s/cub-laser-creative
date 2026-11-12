@@ -31,7 +31,7 @@
 
   Verificar en `astro dev`: tras aceptar en una ficha, la privacidad muestra «permitido»; al retirarlo muestra «no permitido», y la ficha vuelve a mostrar el aviso sin contactar con Instagram
 - [x] 2.2 Con el permiso concedido, anotar desde las herramientas del navegador (Aplicación → Cookies) las cookies que crea Instagram y nombrarlas en la política (pregunta abierta del diseño). Pedir al titular que revise el texto. Verificar que el titular da el visto bueno
-- [ ] 2.3 Ejecutar `npm run verify`, hacer commit (sin coautoría) y push a `main`. Verificar:
+- [x] 2.3 Ejecutar `npm run verify`, hacer commit (sin coautoría) y push a `main`. Verificar:
   - El commit aparece en GitHub y la web se actualiza (`curl` con `?v=$RANDOM`).
   - `/privacidad/` muestra la sección de Instagram.
   - Lighthouse móvil de una ficha publicada da ≥ 90 en las cuatro categorías. Si no hay fichas publicadas, se mide en `wrangler dev` con un borrador desmarcado en local.
@@ -116,7 +116,7 @@
   - `openspec/config.yaml`: Worker solo para `/admin/api`, panel, e Instagram con permiso.
 
   Verificar releyendo que ya no dicen «sin script propio» ni «sin cookies» sin matices
-- [ ] 7.2 **Antes de nada, el titular regenera el token de GitHub** (el 12-11 salió por error en la conversación): «Regenerate token» en GitHub y actualizarlo en el secreto (`npx wrangler secret put GITHUB_TOKEN`) y en `.dev.vars`. Comprobar que las tareas 3.2 y 3.3 están hechas. Ejecutar `npm run verify`, hacer commit (sin coautoría) y push a `main`. Verificar:
+- [x] 7.2 **Antes de nada, el titular regenera el token de GitHub** (el 12-11 salió por error en la conversación): «Regenerate token» en GitHub y actualizarlo en el secreto (`npx wrangler secret put GITHUB_TOKEN`) y en `.dev.vars`. Comprobar que las tareas 3.2 y 3.3 están hechas. Ejecutar `npm run verify`, hacer commit (sin coautoría) y push a `main`. Verificar:
   - El build de Workers Builds pasa.
   - `/` responde 200 sin pasar por el Worker.
   - `/admin/` redirige a Access.
