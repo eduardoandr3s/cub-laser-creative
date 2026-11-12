@@ -12,10 +12,15 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      filter: (pagina) => !new URL(pagina).pathname.startsWith('/404'),
+      // Fuera del mapa: la 404 y el panel de edición.
+      filter: (pagina) => !/^\/(404|admin)\b/.test(new URL(pagina).pathname),
     }),
   ],
   vite: {
     plugins: [tailwindcss()],
+    // En `astro dev`, la API del panel la atiende el Worker de `npx wrangler dev` (puerto 8787).
+    server: {
+      proxy: { '/admin/api': 'http://localhost:8787' },
+    },
   },
 });

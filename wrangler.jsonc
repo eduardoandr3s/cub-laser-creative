@@ -1,20 +1,34 @@
-// Publicación en Cloudflare Workers con recursos estáticos, sin script propio:
-// todas las peticiones las sirve `dist/`, gratis y sin límite de tráfico.
+// Publicación en Cloudflare Workers con recursos estáticos. Todas las páginas las sirve `dist/`,
+// gratis y sin límite de tráfico. El script del Worker (`worker/`) solo se ejecuta para la API
+// del panel de edición (`/admin/api/*`).
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   // Debe coincidir con el nombre del Worker en el panel de Cloudflare, o Workers Builds falla.
   "name": "cub-laser-creative",
   "compatibility_date": "2026-10-17",
+  "main": "worker/index.ts",
   // Producción solo en cublasercreative.es: sin la copia en cub-laser-creative.<cuenta>.workers.dev.
   // Las vistas previas de las ramas siguen en workers.dev; se configuran aparte.
   "workers_dev": false,
   "preview_urls": true,
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
+    // Solo la API del panel pasa por el Worker; el resto lo sirven los recursos estáticos.
+    "run_worker_first": ["/admin/api/*"],
     // Rutas inexistentes: estado 404 con el contenido de dist/404.html.
     "not_found_handling": "404-page",
     // `/carpeta/` sirve carpeta/index.html y `/carpeta` redirige a `/carpeta/` (URLs con barra final).
     "html_handling": "auto-trailing-slash"
+  },
+  // Panel de edición. El token de GitHub es un secreto: `npx wrangler secret put GITHUB_TOKEN`.
+  // En local, `.dev.vars` (fuera de git) sustituye estos valores y activa ACCESO_LOCAL.
+  "vars": {
+    // Equipo de Cloudflare Zero Trust y «Application Audience (AUD) Tag» de la aplicación «Panel CUB».
+    "ACCESS_EQUIPO": "https://cublasercreative.cloudflareaccess.com",
+    "ACCESS_AUD": "43f07c594e8834385c1a11a87ac8b2605a2b59bc0d10fe507078f99ed4c48c7e",
+    "GITHUB_REPO": "eduardoandr3s/cub-laser-creative",
+    "GITHUB_RAMA": "main"
   },
   // Necesario para `wrangler preview`, el comando con el que Workers Builds publica las ramas
   // que no son `main` como vistas previas. Vacío: usan la misma configuración que producción.

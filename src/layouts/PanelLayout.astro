@@ -1,0 +1,54 @@
+---
+/**
+ * Layout del panel de edición (`/admin/`): mismos estilos que la web, sin el WhatsApp
+ * flotante ni la navegación pública, y fuera de los buscadores (`noindex, nofollow`).
+ */
+import '../styles/global.css';
+import fuente from '@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2?url';
+import Logo from '../components/Logo.astro';
+import { negocio } from '../config/negocio';
+
+interface Props {
+  titulo: string;
+}
+
+const { titulo } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="preload" href={fuente} as="font" type="font/woff2" crossorigin />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#F8FAFC" />
+    <title>{titulo} | {negocio.nombre}</title>
+  </head>
+  <body class="flex min-h-dvh flex-col">
+    <a
+      href="#contenido"
+      class="sr-only rounded-lg bg-tinta px-4 py-2 font-bold text-papel focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50"
+    >
+      Saltar al contenido
+    </a>
+    <header class="border-b border-tinta/10 bg-papel">
+      <div class="contenedor flex flex-wrap items-center justify-between gap-x-4 gap-y-1 py-3">
+        <a href="#/" class="-m-1 flex min-h-11 items-center gap-3 rounded-md p-1">
+          <Logo />
+          <span class="rounded-full bg-tinta px-2.5 py-0.5 text-xs font-bold text-papel">Panel</span>
+        </a>
+        <div class="flex items-center gap-4 text-sm">
+          <span data-sesion class="text-tinta-suave"></span>
+          <a href="/" class="inline-flex min-h-11 items-center font-semibold text-cian-texto underline-offset-2 hover:underline">
+            Ver la web
+          </a>
+        </div>
+      </div>
+    </header>
+    <main id="contenido" tabindex="-1" class="contenedor flex-1 py-6 sm:py-8">
+      <slot />
+    </main>
+  </body>
+</html>

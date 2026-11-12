@@ -6,10 +6,12 @@
  * - cian:        solo fondos con texto tinta (6,5:1), degradados y detalles. Nunca texto sobre claro.
  * - cian-texto:  enlaces y texto en cian sobre papel, blanco o madera (≥ 5:1).
  * - magenta:     botón principal con texto blanco (4,52:1) y acentos grandes. Nunca texto normal sobre claro.
+ * - magenta-texto: errores y avisos en texto normal sobre claro (7:1 sobre blanco, 6,1:1 sobre madera).
  * - ambar:       fondos con texto tinta (10,3:1), degradados e insignias. Nunca texto sobre claro.
  * - tinta:       texto y estructura (≥ 15:1 sobre los fondos claros).
  * - tinta-suave: texto secundario (≥ 6,6:1 sobre los fondos claros).
  * - whatsapp:    solo el botón flotante, con el icono en tinta (9:1).
+ * - exito:       fondo de los avisos de «guardado» y «publicado» del panel, con texto tinta (16:1).
  */
 @theme {
   --font-sans: 'Plus Jakarta Sans Variable', ui-sans-serif, system-ui, sans-serif;
@@ -17,12 +19,14 @@
   --color-cian: #00a3ff;
   --color-cian-texto: #006aad;
   --color-magenta: #e6007a;
+  --color-magenta-texto: #b0005d;
   --color-ambar: #ffb800;
   --color-tinta: #0f172a;
   --color-tinta-suave: #475569;
   --color-papel: #f8fafc;
   --color-madera: #f5efe6;
   --color-whatsapp: #25d366;
+  --color-exito: #e7f6ec;
 }
 
 @layer base {

@@ -2,7 +2,7 @@
 
 Web estática para mostrar los trabajos de **CUB Laser Creative** (corte láser e impresión a todo color sobre madera, Valencia) y recibir encargos por WhatsApp.
 
-Hecha con [Astro](https://astro.build) y [Tailwind CSS](https://tailwindcss.com). No tiene base de datos ni servidor: los trabajos son carpetas con un archivo de texto y sus fotos.
+Hecha con [Astro](https://astro.build) y [Tailwind CSS](https://tailwindcss.com). No tiene base de datos: los trabajos son carpetas con un archivo de texto y sus fotos. Las páginas públicas son archivos estáticos. El único código de servidor es el guardado del [panel de edición](#panel-de-edición-admin) (`/admin/`), y la web no depende de él.
 
 ## Requisitos
 
@@ -27,10 +27,11 @@ npm install
 | `npm run dev`     | Servidor de desarrollo en <http://localhost:4321> (muestra los borradores)  |
 | `npm run build`   | Genera la web final en `dist/`                                              |
 | `npm run preview` | Sirve `dist/` para revisarla tal como quedará publicada                     |
-| `npm run check`   | Comprueba los tipos y la configuración                                      |
+| `npm run check`   | Comprueba los tipos y la configuración (también los del Worker)             |
 | `npm run test`    | Ejecuta los tests                                                           |
 | `npm run verify`  | `check` + `test` + `build`: ejecútalo antes de publicar                     |
-| `npx wrangler dev` | Sirve `dist/` como Cloudflare en producción: redirecciones, 404 y cabeceras (antes, `npm run build`) |
+| `npx wrangler dev` | Sirve `dist/` como Cloudflare en producción (redirecciones, 404 y cabeceras) y el Worker del panel en <http://localhost:8787> (antes, `npm run build`) |
+| `npm run tipos:worker` | Regenera los tipos del Worker tras cambiar `wrangler.jsonc`             |
 
 ## Dónde está cada cosa
 
@@ -44,16 +45,21 @@ src/
     categorias/     ← una categoría por archivo .yml
     trabajos/       ← un trabajo por carpeta (index.md + fotos)
   components/Logo.astro  ← logotipo de la cabecera
+  pages/admin/      ← página del panel de edición
+  panel/            ← código del panel en el navegador (lista, formulario, fotos)
+  lib/panel/        ← reglas que comparten el panel y el Worker (Markdown, nombres, validación)
+worker/             ← API del panel (/admin/api/*): guarda en GitHub
 public/
   favicon.svg       ← icono de la pestaña del navegador
   og-default.png    ← imagen al compartir la web (1200 × 630)
   _headers          ← cabeceras de caché que aplica Cloudflare
 wrangler.jsonc      ← configuración de la publicación en Cloudflare Workers
+.dev.vars           ← solo en tu ordenador (fuera de git): variables del panel en local
 ```
 
 ## Añadir un trabajo
 
-No hace falta tocar código.
+No hace falta tocar código. Lo más cómodo es el [panel de edición](#panel-de-edición-admin): se entra desde el navegador, también en el móvil, y no hace falta cuenta de GitHub. Si prefieres hacerlo a mano:
 
 1. Crea una carpeta en `src/content/trabajos/`. Su nombre será la dirección del trabajo: la carpeta `caja-grabada` se publica en `/trabajos/caja-grabada/`. Usa minúsculas, sin acentos ni espacios (con guiones).
 2. Copia dentro las fotos (por ejemplo `portada.jpg`, `detalle-1.jpg`…).
@@ -91,6 +97,7 @@ No hace falta tocar código.
 | `portada`     | Sí          | Foto principal (`src`) y su descripción para personas ciegas (`alt`)                              |
 | `imagenes`    | No          | Más fotos. El `alt` es opcional; si falta se usa «título — foto N»                                |
 | `videos`      | No          | Enlaces de YouTube (ver abajo)                                                                    |
+| `instagram`   | No          | Enlaces de publicaciones o reels de Instagram (ver abajo)                                         |
 | `material`    | No          | Texto libre                                                                                       |
 | `destacado`   | No          | `true` para que salga en «Trabajos destacados» de la portada (máximo 6; si no marcas ninguno, salen los 6 más recientes) |
 | `borrador`    | No          | `true` para que solo se vea con `npm run dev` y no se publique                                    |
@@ -114,6 +121,24 @@ Sirve cualquier forma del enlace. Los **Shorts** se muestran en vertical y el re
 
 El reproductor de YouTube no se carga hasta que el visitante pulsa el botón de reproducir, y lo hace desde `youtube-nocookie.com`, el modo de privacidad mejorada. En el móvil puede hacer falta un segundo toque para que empiece a sonar.
 
+## Añadir publicaciones de Instagram
+
+Pega en `instagram` el enlace de cada publicación o reel (el de «Copiar enlace» en la app). Tienen que ser públicos:
+
+```md
+instagram:
+  - https://www.instagram.com/p/XXXXXXXXXXX/
+  - https://www.instagram.com/reel/XXXXXXXXXXX/?igsh=…
+```
+
+Sirve con o sin `www.`, con el nombre de la cuenta delante y con los parámetros que añade la app. Un enlace a un **perfil** o a una **historia** no vale: `npm run build` se detiene y lo dice.
+
+La ficha muestra una sección «En Instagram» debajo de los videos:
+
+- Al principio, solo un enlace a cada publicación y un aviso con el botón «Mostrar publicaciones de Instagram». Hasta que el visitante lo pulsa, la página no se conecta con Instagram.
+- Si lo pulsa, se cargan las publicaciones con el código oficial de Instagram (que sí usa cookies), y su navegador lo recuerda para las siguientes fichas.
+- El permiso se retira en `/privacidad/#instagram`. Esa sección explica qué recibe Meta.
+
 ## Crear una categoría
 
 Crea un archivo en `src/content/categorias/`. Su nombre (sin `.yml`) es el que se usa en el campo `categoria` de los trabajos y en la dirección `/trabajos/categoria/<nombre>/`.
@@ -128,6 +153,8 @@ descripcion: Carteles y rótulos de madera para negocios y hogares. # opcional, 
 `orden` decide la posición en el filtro de la galería (de menor a mayor). Una categoría sin trabajos publicados no aparece en el filtro ni tiene página.
 
 ## Fotos: tamaño recomendado
+
+Desde el panel no hay que preocuparse: reduce cada foto a 2400 px y le quita la ubicación antes de subirla. A mano:
 
 - Formato JPG (o PNG/WebP). Astro las convierte a AVIF y WebP en varios tamaños automáticamente.
 - Lado largo de unos **2000–2500 px** y menos de **1,5 MB** por foto. Más grande no se ve mejor y hace el repositorio más pesado.
@@ -173,11 +200,11 @@ El logotipo de la cabecera es texto con el degradado de la marca (`src/component
 
 ## Publicar en Cloudflare Workers
 
-La web se publica en **Cloudflare Workers** como recursos estáticos, sin código de servidor: es gratis, permite uso comercial y no limita el tráfico. Se usa Workers y no Cloudflare Pages porque Cloudflare lleva ahí todas las novedades.
+La web se publica en **Cloudflare Workers** como recursos estáticos: es gratis, permite uso comercial y no limita el tráfico. Se usa Workers y no Cloudflare Pages porque Cloudflare lleva ahí todas las novedades. El Worker tiene un script propio (`worker/`), pero solo se ejecuta para la API del [panel de edición](#panel-de-edición-admin) (`/admin/api/*`). Las páginas se sirven sin pasar por él y no cuentan para el límite diario del plan gratuito.
 
 Lo que necesita Cloudflare está en el repositorio:
 
-- `wrangler.jsonc`: publica la carpeta `dist/`, responde a las rutas inexistentes con la página 404 (estado 404) y redirige las rutas sin barra final a la versión con barra (`/trabajos` → `/trabajos/`). Su `name` (`cub-laser-creative`) debe coincidir con el nombre del Worker en el panel.
+- `wrangler.jsonc`: publica la carpeta `dist/`, responde a las rutas inexistentes con la página 404 (estado 404) y redirige las rutas sin barra final a la versión con barra (`/trabajos` → `/trabajos/`). También define el script del panel y sus variables. Su `name` (`cub-laser-creative`) debe coincidir con el nombre del Worker en el panel de Cloudflare.
 - `public/_headers`: los archivos de `/_astro/` llevan el contenido en el nombre y se guardan en caché un año; las páginas se revalidan en cada visita, así que una publicación nueva se ve al recargar.
 
 Para probarlo en local tal como funcionará en Cloudflare:
@@ -228,6 +255,142 @@ npx wrangler deploy
 ```
 
 **Dejar Cloudflare** (no debería hacer falta): vuelve a poner en DonDominio sus servidores DNS. Tarda horas en propagarse y deja sin web ni correo hasta que se configuren en otro sitio.
+
+## Panel de edición (`/admin/`)
+
+En <https://cublasercreative.es/admin/> se crean, editan y eliminan trabajos desde el navegador, también en el móvil, sin cuenta de GitHub. Cada guardado es **un commit en `main`**, y Cloudflare lo publica como cualquier otro cambio. El panel escribe el mismo `index.md` y las mismas fotos que se harían a mano, y el build los valida igual.
+
+Cómo funciona:
+
+- **Cloudflare Access** protege `/admin/` y todo lo que hay debajo. Solo entran los correos invitados, con un código que les llega por correo.
+- **El Worker** (`worker/`) solo atiende `/admin/api/*`. En cada petición comprueba la sesión de Access y guarda en GitHub con un token que solo existe como secreto en Cloudflare. El resto de la web no pasa por él: si fallara, solo dejaría de funcionar el guardado.
+
+### Guía para quien edita
+
+**Entrar**
+
+1. Abre <https://cublasercreative.es/admin/>.
+2. Escribe tu correo y pide el código. Si tu correo no está invitado, no te llegará ningún código válido: pide que te inviten.
+3. Escribe el código que te llega (míralo también en spam). En ese navegador no te lo volverá a pedir durante un mes.
+
+**Crear un trabajo**
+
+1. Pulsa «+ Nuevo trabajo».
+2. Escribe el título. El panel propone el **identificador**, que es el final de la dirección del trabajo (`/trabajos/<identificador>/`). Puedes cambiarlo antes de guardar por primera vez. Después ya no se puede.
+3. Rellena la descripción corta (el contador indica cuántos caracteres quedan, hasta 160), la categoría y la fecha. Si quieres, añade el material y la descripción larga.
+4. Elige la portada y escribe qué se ve en ella. Es obligatorio: lo leen los lectores de pantalla y Google.
+5. Añade más fotos, videos de YouTube y publicaciones de Instagram, si los hay.
+6. Pulsa «Guardar».
+
+Un trabajo nuevo empieza marcado como **Borrador**: se guarda, pero no se ve en la web. Cuando quieras publicarlo, desmarca «Borrador» y vuelve a guardar.
+
+**Fotos**
+
+- «+ Añadir fotos» abre la galería o la cámara del móvil. Se pueden elegir varias a la vez.
+- Antes de subir cada foto, el panel la reduce y le quita los datos de ubicación. Verás una barra de progreso: espera a que terminen antes de guardar.
+- Los botones de cada foto la suben o bajan en el orden, la quitan o la convierten en portada («Usar como portada»). La portada anterior pasa a ser una foto más.
+- Si una foto no se puede leer (por ejemplo, una HEIC en el ordenador), guárdala como JPG y vuelve a subirla.
+
+**Videos e Instagram**: pega el enlace de YouTube o de Instagram (en las apps, «Compartir» → «Copiar enlace»). Se pueden añadir, quitar y reordenar. El panel avisa si un enlace no vale.
+
+**Guardar y publicar**
+
+- Si falta algo o está mal, el panel lo explica junto al campo y no guarda hasta que se corrija.
+- Al guardar sale «Publicando…». Suele pasar a «Publicado» en menos de un minuto, y entonces el cambio ya se ve en la web.
+- Si el trabajo está en borrador, el aviso dice que se ha guardado, pero que no se verá en la web.
+
+**Ocultar o eliminar**
+
+- Para ocultar un trabajo sin perderlo, márcalo como «Borrador» y guarda.
+- «Eliminar trabajo» borra el trabajo y todas sus fotos, después de pedir confirmación. Si fue un error, quien mantiene la web puede recuperarlo del historial de GitHub.
+
+**Si algo no va bien**
+
+| Mensaje | Qué hacer |
+| --- | --- |
+| «La web todavía no se ha actualizado y puede que la publicación haya fallado» (a los 5 minutos) | La web sigue con la versión anterior. Avisa a quien mantiene la web: el motivo está en el registro del build, en Cloudflare. |
+| «Este trabajo ha cambiado desde que lo abriste» | Otra persona lo ha guardado mientras tanto. Copia lo que hayas escrito, pulsa «Volver a cargar el trabajo» y repite tu cambio. |
+| «Tu sesión ha caducado» | Recarga la página y vuelve a entrar con el código. |
+| «El acceso a GitHub ha caducado o no es válido» | Avisa a quien mantiene la web: hay que [renovar el token](#renovar-el-token-de-github). |
+
+### Configuración
+
+Ya está hecha. Queda aquí como referencia:
+
+- **Cloudflare Zero Trust**, plan Free (hasta 50 personas). Equipo: `cublasercreative.cloudflareaccess.com`.
+- **Aplicación de Access «Panel CUB»** (*self-hosted*) sobre `cublasercreative.es/admin`, que cubre la página y la API:
+  - Identificación con *One-time PIN* (código por correo).
+  - Sesión de 1 mes.
+  - Política *Allow* «Personas invitadas» con la lista de correos.
+- **`wrangler.jsonc`**: `main` (el Worker), `assets.run_worker_first: ["/admin/api/*"]` y las variables `ACCESS_EQUIPO`, `ACCESS_AUD` (el *Application Audience (AUD) Tag* de la aplicación), `GITHUB_REPO` y `GITHUB_RAMA`. No son secretos.
+- **Secreto `GITHUB_TOKEN`**: token *fine-grained* de GitHub limitado al repositorio `cub-laser-creative`, con el permiso *Contents: Read and write*. Solo está en Cloudflare: nunca en el repositorio ni en el navegador.
+
+Los commits del panel figuran a nombre del dueño del token y se titulan `Panel: crear «…»`, `Panel: guardar «…»` o `Panel: eliminar «…»`. El correo de quien edita no se escribe en ningún sitio, porque el repositorio es público.
+
+Las vistas previas de las ramas (`*.workers.dev`) no pasan por Access. Allí la API del panel responde 403 a propósito, así que el panel solo funciona en el dominio y en local.
+
+#### Invitar a alguien
+
+1. En Cloudflare, entra en **Zero Trust → Access** y abre la política «Personas invitadas» (en **Políticas**, o desde la aplicación «Panel CUB»).
+2. En **Incluir → Emails**, añade su correo y guarda.
+3. Pídele que entre en `/admin/` con ese correo.
+
+Para quitarle el acceso, borra su correo de la política. Su sesión puede seguir abierta hasta un mes. Para cerrarla ya, en **Zero Trust → Usuarios** (Users), elige a la persona y pulsa **Revocar sesión** (Revoke session).
+
+#### Renovar el token de GitHub
+
+Cuando caduca, el panel deja de guardar, pero la web sigue funcionando. GitHub avisa por correo unos días antes. Apunta también la fecha de caducidad en tu calendario.
+
+1. En GitHub: **Settings → Developer settings → Personal access tokens → Fine-grained tokens**. Abre el token del panel y pulsa **Regenerate token**. Elige la caducidad más larga que permita y copia el token nuevo. El anterior deja de funcionar en ese momento.
+2. En la terminal del proyecto, guárdalo como secreto y pégalo cuando lo pida. No lo escribas en ningún chat ni archivo del repositorio:
+
+   ```sh
+   npx wrangler secret put GITHUB_TOKEN
+   ```
+
+3. Si usas el panel en local, cámbialo también en `.dev.vars`.
+4. Comprueba que funciona: abre un borrador en `/admin/` y guárdalo.
+
+Si el token se ha visto en algún sitio (una captura, un chat, un archivo), regenéralo igual aunque no haya caducado.
+
+#### Retirar el panel
+
+No debería hacer falta:
+
+1. Quita `main`, `assets.binding` y `assets.run_worker_first` de `wrangler.jsonc` y publica. La web vuelve a ser solo estática.
+2. Revoca el token en GitHub y borra la aplicación de Access.
+
+Lo que se guardó desde el panel sigue siendo contenido normal del repositorio.
+
+### Probar el panel en local
+
+1. Crea `.dev.vars` en la raíz del proyecto. Está en `.gitignore`, así que no se sube:
+
+   ```sh
+   GITHUB_TOKEN=…            # puede ser el mismo del secreto
+   GITHUB_RAMA=prueba-panel  # rama de pruebas, para no tocar main
+   ACCESO_LOCAL=1            # en localhost, entra sin Access con un correo ficticio
+   ```
+
+   `ACCESO_LOCAL` solo tiene efecto en `localhost` y `127.0.0.1`. En el dominio no hace nada, aunque se configure por error.
+
+2. Si la rama de pruebas no existe, créala desde `main` con `git push origin main:prueba-panel`. Para empezar de cero, bórrala (`git push origin --delete prueba-panel`) y vuelve a crearla.
+3. Genera la web y arranca el Worker:
+
+   ```sh
+   npm run build
+   npx wrangler dev
+   ```
+
+   Abre <http://localhost:8787/admin/>. Lo que guardes irá a la rama `prueba-panel`.
+
+4. Para trabajar en la interfaz con recarga automática, deja `wrangler dev` abierto y ejecuta `npm run dev` en otra terminal. En <http://localhost:4321/admin/>, las peticiones a `/admin/api` llegan al Worker.
+
+Ten en cuenta:
+
+- Tras otro `npm run build`, reinicia `wrangler dev`: no ve los archivos nuevos de `dist/`.
+- En local, `/version.json` vale `null` y la rama de pruebas no se publica. Por eso, después de guardar, el aviso se queda en «Publicando…» y a los 5 minutos dice que puede haber fallado. Es lo esperado.
+- `npm run test` prueba el Worker con un GitHub simulado: no necesita token ni conexión.
 
 ## Correo hola@
 

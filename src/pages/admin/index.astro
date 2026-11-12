@@ -1,0 +1,24 @@
+---
+/**
+ * Panel de edición de trabajos. Cloudflare Access protege `/admin/` (código por correo) y la
+ * API del Worker (`worker/`) guarda los cambios en GitHub. La página es estática: todo lo
+ * dinámico lo monta `src/panel/` en el navegador.
+ */
+import PanelLayout from '../../layouts/PanelLayout.astro';
+---
+
+<PanelLayout titulo="Panel de trabajos">
+  <div data-aviso-global aria-live="polite"></div>
+  <div data-vista>
+    <p class="text-tinta-suave">Cargando los trabajos…</p>
+  </div>
+  <noscript>
+    <p class="mt-4 rounded-2xl bg-madera p-4">El panel necesita JavaScript para funcionar.</p>
+  </noscript>
+</PanelLayout>
+
+<script>
+  import { iniciarPanel } from '../../panel/main';
+
+  iniciarPanel();
+</script>

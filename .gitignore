@@ -12,6 +12,8 @@ npm-debug.log*
 # environment variables
 .env
 .env.production
+# variables y secretos de `wrangler dev` (token de GitHub de pruebas)
+.dev.vars*
 
 # OS / editor
 .DS_Store

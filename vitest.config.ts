@@ -5,6 +5,6 @@ import { getViteConfig } from 'astro/config';
 // `astro:content` o `astro/zod` se puedan cargar en los tests.
 export default getViteConfig({
   test: {
-    include: ['src/**/*.test.ts'],
+    include: ['src/**/*.test.ts', 'worker/**/*.test.ts'],
   },
 });

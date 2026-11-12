@@ -1,0 +1,20 @@
+{
+  // El Worker se comprueba aparte: usa los tipos de Workers (generados con `npm run tipos:worker`),
+  // no los del navegador ni los de Astro.
+  "compilerOptions": {
+    "target": "es2023",
+    "lib": ["es2023"],
+    "module": "es2022",
+    "moduleResolution": "bundler",
+    "types": ["./worker-configuration.d.ts"],
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true
+  },
+  "include": ["./**/*.ts"],
+  "exclude": ["./**/*.test.ts"]
+}
