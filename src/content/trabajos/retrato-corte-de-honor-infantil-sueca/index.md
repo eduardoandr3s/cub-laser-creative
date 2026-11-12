@@ -1,7 +1,7 @@
 ---
 titulo: Retrato corte de honor infantil Sueca
 descripcion: Hermoso trabajo en grabado láser para nuestra para Vega, miembro de la Corte de Honor Infantil de Sueca 2027.
-categoria: placas
+categoria: retratos
 fecha: 2026-11-01
 material: Contrachapado 3mm
 destacado: true
