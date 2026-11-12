@@ -121,7 +121,7 @@
   - `/` responde 200 sin pasar por el Worker.
   - `/admin/` redirige a Access.
   - En una vista previa de rama (`*.workers.dev`), `/admin/api/sesion` responde 403.
-- [ ] 7.3 **(titular)** Prueba de principio a fin desde el móvil:
+- [x] 7.3 **(titular)** Prueba de principio a fin desde el móvil:
   1. Entrar con el código.
   2. Crear un trabajo en borrador con una foto de la cámara, un video de YouTube y una publicación de Instagram, y guardar. El aviso debe ser el de borrador.
   3. Desmarcar «borrador» y guardar: pasa a «Publicado» y la ficha se ve en la web con Instagram tras aceptar.
@@ -133,4 +133,4 @@
 
 ## 8. Cierre
 
-- [ ] 8.1 Repasar los escenarios de las tres specs del cambio con los resultados de las partes 1 a 7 y anotar los pendientes (por ejemplo, la mejora de los *check runs*). Archivar antes `publicar-web-y-correo` (cuando estén hechas su 4.6 y su 5.1) y después este cambio. Verificar con `openspec validate --strict` y `openspec list` que solo queda archivado
+- [ ] 8.1 Repasar los escenarios de las tres specs del cambio con los resultados de las partes 1 a 7 y anotar los pendientes (por ejemplo, la mejora de los *check runs* y una eliminación que gastó 14 ms de CPU en la prueba de la 7.3, la única de más de 60 por encima de 10 ms). Archivar antes `publicar-web-y-correo` (cuando estén hechas su 4.6 y su 5.1) y después este cambio. Verificar con `openspec validate --strict` y `openspec list` que solo queda archivado
