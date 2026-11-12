@@ -1,7 +1,7 @@
 ---
 titulo: Cama elfos 29 x 18cms.
 descripcion: Cama para elfos u otros juguetes, se puede personalizar con el nombre del elfo, niño o alguna frase.
-categoria: eventos
+categoria: navidad
 fecha: 2026-10-25
 material: Contrachapado 3mm
 destacado: true
