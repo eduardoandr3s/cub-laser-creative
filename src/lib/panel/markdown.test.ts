@@ -3,8 +3,21 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { escribirTrabajo, fotosReferenciadas, leerTrabajo, type Trabajo } from './markdown';
 
+// Dos trabajos de ejemplo guardados aparte, porque el contenido real se puede borrar desde el panel.
+const FIXTURES = join(process.cwd(), 'src/lib/panel/fixtures');
+const fijos = readdirSync(FIXTURES).map((archivo) => [
+  archivo.replace(/\.md$/, ''),
+  readFileSync(join(FIXTURES, archivo), 'utf8'),
+]);
+
+// Más todos los trabajos que haya en el repositorio, escritos a mano o por el panel.
 const CARPETA = join(process.cwd(), 'src/content/trabajos');
-const ejemplos = readdirSync(CARPETA).map((slug) => [slug, readFileSync(join(CARPETA, slug, 'index.md'), 'utf8')]);
+const reales = readdirSync(CARPETA).map((slug) => [
+  `src/content/trabajos/${slug}`,
+  readFileSync(join(CARPETA, slug, 'index.md'), 'utf8'),
+]);
+
+const ejemplos = [...fijos, ...reales];
 
 /** El archivo sin las líneas de comentario YAML, que el panel no conserva. */
 const sinComentarios = (contenido: string) =>
