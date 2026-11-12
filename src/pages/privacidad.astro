@@ -1,6 +1,7 @@
 ---
 // Texto base conforme al RGPD y la LOPDGDD. El titular debe revisarlo antes de publicar.
 import DatoLegal from '../components/DatoLegal.astro';
+import PermisoInstagram from '../components/PermisoInstagram.astro';
 import { negocio } from '../config/negocio';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
@@ -9,7 +10,7 @@ const { legal } = negocio;
 
 <BaseLayout
   titulo="Política de privacidad"
-  descripcion={`Política de privacidad de ${negocio.nombre}: sin cookies ni formularios. Cómo tratamos los datos cuando nos escribes por WhatsApp o por correo.`}
+  descripcion={`Política de privacidad de ${negocio.nombre}: sin cookies propias ni formularios. Qué datos tratamos si nos escribes o si aceptas ver Instagram.`}
 >
   <article class="contenedor py-10 sm:py-14">
     <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Política de privacidad</h1>
@@ -24,11 +25,12 @@ const { legal } = negocio;
         <li><strong>Correo electrónico:</strong> <DatoLegal valor={legal.email} /></li>
       </ul>
 
-      <h2>Sin cookies ni formularios</h2>
+      <h2>Sin cookies propias ni formularios</h2>
       <p>
-        Este sitio web <strong>no usa cookies</strong> propias ni de terceros, no incluye
-        herramientas de analítica ni publicidad y <strong>no tiene formularios</strong>. Por eso no
-        te pedimos ningún consentimiento al entrar.
+        Este sitio web <strong>no usa cookies propias</strong>, no incluye herramientas de analítica ni
+        publicidad y <strong>no tiene formularios</strong>. Por eso no te pedimos ningún consentimiento
+        al entrar. Solo te lo pedimos en los trabajos que muestran publicaciones de Instagram, porque
+        Instagram sí usa cookies (lo explicamos <a href="#instagram">más abajo</a>).
       </p>
 
       <h2>Contacto por WhatsApp o correo electrónico</h2>
@@ -66,6 +68,34 @@ const { legal } = negocio;
         de YouTube (youtube-nocookie.com). A partir de ese momento se aplica la política de privacidad
         de Google, que puede almacenar información en tu navegador.
       </p>
+
+      <h2 id="instagram">Publicaciones de Instagram</h2>
+      <p>
+        Algunos trabajos incluyen publicaciones de nuestra cuenta de Instagram. Mientras no lo aceptes,
+        solo verás un enlace a cada publicación y tu navegador no se conecta con Instagram.
+      </p>
+      <p>
+        Si pulsas «Mostrar publicaciones de Instagram», tu navegador descarga las publicaciones y el
+        código de Instagram desde sus servidores. Desde ese momento, Meta Platforms Ireland Limited,
+        responsable de Instagram, recibe datos como tu dirección IP, el tipo de navegador y la página
+        que estás viendo. Si ya tienes cookies de Instagram en este navegador (por ejemplo,
+        <code>csrftoken</code>, o las de tu sesión si has entrado en Instagram), tu navegador puede
+        enviárselas, y Meta podría relacionar la visita con tu cuenta. En nuestra última comprobación
+        (noviembre de 2026), mostrar las publicaciones no creaba cookies nuevas, pero Meta puede crear
+        las suyas y cambiar cómo funciona en cualquier momento. Meta trata estos datos según su
+        <a href="https://privacycenter.instagram.com/policy" target="_blank" rel="noopener"
+          >política de privacidad</a
+        > y puede transferirlos a Estados Unidos, al amparo del Marco de Privacidad de Datos entre la
+        UE y EE. UU.
+      </p>
+      <p>
+        Para no volver a preguntarte, guardamos tu decisión en el almacenamiento de tu navegador (no es
+        una cookie ni nos llega a nosotros). Puedes retirar el permiso cuando quieras: desde entonces las
+        publicaciones dejan de cargarse y vuelves a ver el aviso. Las cookies que Instagram ya haya
+        guardado son suyas y no podemos borrarlas nosotros; puedes eliminarlas desde la configuración de
+        tu navegador.
+      </p>
+      <PermisoInstagram />
 
       <h2>Alojamiento</h2>
       <p>

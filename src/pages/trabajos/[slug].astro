@@ -5,6 +5,7 @@ import { getEntry, render } from 'astro:content';
 import ArrowLeft from '@lucide/astro/icons/arrow-left';
 import BotonWhatsApp from '../../components/BotonWhatsApp.astro';
 import GrillaTrabajos from '../../components/GrillaTrabajos.astro';
+import PublicacionesInstagram from '../../components/PublicacionesInstagram.astro';
 import RedesSecundarias from '../../components/RedesSecundarias.astro';
 import VideoYouTube from '../../components/VideoYouTube.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
@@ -20,7 +21,7 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { trabajo, relacionados } = Astro.props;
-const { titulo, descripcion, material, portada, imagenes, videos } = trabajo.data;
+const { titulo, descripcion, material, portada, imagenes, videos, instagram } = trabajo.data;
 const categoria = await getEntry(trabajo.data.categoria);
 const { Content } = await render(trabajo);
 
@@ -136,6 +137,8 @@ const imagenOG = await getImage({ src: portada.src, width: anchoOG, format: 'jpe
         </section>
       )
     }
+
+    {instagram.length > 0 && <PublicacionesInstagram publicaciones={instagram} />}
 
     {
       relacionados.length > 0 && (

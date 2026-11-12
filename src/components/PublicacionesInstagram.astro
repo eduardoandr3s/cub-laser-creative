@@ -1,0 +1,151 @@
+---
+/**
+ * Publicaciones de Instagram de un trabajo, cargadas solo con el permiso del visitante.
+ * Sin permiso (o sin JavaScript) solo hay enlaces que abren cada publicación en Instagram,
+ * y la página no contacta con Instagram ni con Meta. Con JavaScript aparece además un aviso
+ * con un botón para dar el permiso. El permiso se recuerda en el navegador
+ * (`lib/permiso-instagram`) y, a partir de entonces, las publicaciones se cargan solas
+ * con el código oficial de Instagram (`embed.js`).
+ *
+ * El aviso va dentro de la sección, no flotando, y su botón es de contorno para que no
+ * tape el WhatsApp flotante ni compita con «Quiero algo así».
+ */
+import ExternalLink from '@lucide/astro/icons/external-link';
+import type { PublicacionInstagram } from '../lib/instagram';
+import Instagram from './iconos/Instagram.astro';
+
+interface Props {
+  publicaciones: PublicacionInstagram[];
+}
+
+const { publicaciones } = Astro.props;
+const varias = publicaciones.length > 1;
+---
+
+<section aria-labelledby="titulo-instagram" class="mt-16">
+  <h2 id="titulo-instagram" tabindex="-1" class="text-2xl font-extrabold tracking-tight">
+    En Instagram
+  </h2>
+
+  <publicaciones-instagram class="block">
+    <div data-aviso hidden class="mt-6 max-w-3xl rounded-2xl bg-madera p-5 sm:p-6">
+      <p>
+        Para ver aquí {varias ? 'las publicaciones' : 'la publicación'}, tu navegador tiene que
+        conectarse con Instagram (Meta), que recibirá datos como tu dirección IP y puede guardar
+        cookies. Si aceptas, lo recordaremos en este navegador y se mostrarán solas en los demás
+        trabajos.
+      </p>
+      <div class="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
+        <button
+          type="button"
+          data-aceptar
+          class="inline-flex min-h-11 items-center gap-2 rounded-full px-5 py-2 font-bold ring-2 ring-tinta/80 transition-colors ring-inset hover:bg-tinta/5"
+        >
+          <Instagram class="size-5 shrink-0" />
+          {varias ? 'Mostrar publicaciones de Instagram' : 'Mostrar publicación de Instagram'}
+        </button>
+        <a
+          href="/privacidad/#instagram"
+          class="inline-flex min-h-11 items-center font-semibold text-cian-texto underline underline-offset-2"
+        >
+          Más información
+        </a>
+      </div>
+    </div>
+
+    <ul class="mt-6 grid items-start gap-4 sm:grid-cols-2">
+      {
+        publicaciones.map((publicacion) => (
+          <li data-url={publicacion.url} class="min-w-0">
+            <a
+              href={publicacion.url}
+              target="_blank"
+              rel="noopener"
+              class="flex min-h-14 items-center gap-3 rounded-2xl bg-white px-4 py-3 font-semibold ring-1 ring-tinta/15 transition-colors hover:bg-tinta/5"
+            >
+              <Instagram class="size-6 shrink-0" />
+              {publicacion.tipo === 'reel' ? 'Ver el reel en Instagram' : 'Ver la publicación en Instagram'}
+              <ExternalLink class="ml-auto size-4 shrink-0 text-tinta-suave" aria-hidden="true" />
+              <span class="sr-only">(se abre en una pestaña nueva)</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </publicaciones-instagram>
+</section>
+
+<style>
+  /*
+   * embed.js fija un ancho mínimo de 326 px, que a 320 px de pantalla provocaría desplazamiento
+   * lateral, y deja la publicación más estrecha que su columna. Ocupa todo el ancho, hasta 540 px.
+   */
+  publicaciones-instagram :global(.instagram-media) {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 540px !important;
+    margin: 0 !important;
+  }
+</style>
+
+<script>
+  import { concederPermiso, permisoConcedido } from '../lib/permiso-instagram';
+
+  const EMBED_JS = 'https://www.instagram.com/embed.js';
+
+  declare global {
+    interface Window {
+      instgrm?: { Embeds: { process(): void } };
+    }
+  }
+
+  /** Carga el código de Instagram una sola vez; si ya está, le pide que procese las publicaciones nuevas. */
+  function cargarEmbedJs() {
+    if (window.instgrm) {
+      window.instgrm.Embeds.process();
+    } else if (!document.querySelector(`script[src="${EMBED_JS}"]`)) {
+      const script = document.createElement('script');
+      script.src = EMBED_JS;
+      script.async = true;
+      document.body.append(script);
+    }
+  }
+
+  class PublicacionesInstagram extends HTMLElement {
+    connectedCallback() {
+      if (permisoConcedido()) {
+        this.mostrar();
+        return;
+      }
+      const aviso = this.querySelector<HTMLElement>('[data-aviso]');
+      const aceptar = this.querySelector('[data-aceptar]');
+      if (!aviso || !aceptar) return;
+      aviso.hidden = false;
+      aceptar.addEventListener('click', () => {
+        // Aunque no se pueda recordar (almacenamiento bloqueado), se muestran en esta página.
+        concederPermiso();
+        this.mostrar();
+        // El botón desaparece: el foco pasa al título de la sección.
+        this.closest('section')?.querySelector<HTMLElement>('h2')?.focus();
+      });
+    }
+
+    /** Sustituye cada enlace por el bloque que `embed.js` convierte en la publicación. */
+    mostrar() {
+      this.querySelector('[data-aviso]')?.remove();
+      for (const elemento of this.querySelectorAll<HTMLElement>('li[data-url]')) {
+        const cita = document.createElement('blockquote');
+        cita.className = 'instagram-media';
+        cita.dataset.instgrmPermalink = elemento.dataset.url;
+        cita.dataset.instgrmVersion = '14';
+        // Mientras carga (o si Instagram falla), el enlace sigue visible dentro del bloque.
+        const enlace = elemento.querySelector('a');
+        if (enlace) cita.append(enlace);
+        elemento.replaceChildren(cita);
+      }
+      cargarEmbedJs();
+    }
+  }
+
+  customElements.define('publicaciones-instagram', PublicacionesInstagram);
+</script>

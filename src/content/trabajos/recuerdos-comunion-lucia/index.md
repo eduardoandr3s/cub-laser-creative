@@ -9,8 +9,8 @@ portada:
   src: ./portada.jpg
   alt: Recuerdos de comunión de madera con el nombre de Lucía
 videos:
-  # Short de ejemplo: sustitúyelo por uno de tu canal
-  - https://www.youtube.com/shorts/q7yv27LY1Qo
+  # Short real del canal, para probar el reproductor
+  - https://www.youtube.com/shorts/NFDRH3iWopo
 ---
 
 **Trabajo de ejemplo en borrador: solo se ve con `npm run dev`.**

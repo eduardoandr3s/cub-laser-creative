@@ -15,6 +15,10 @@ imagenes:
   - src: ./detalle-2.jpg
   - src: ./detalle-3.jpg
     alt: Llaveros preparados en sus bolsitas para los invitados
+instagram:
+  # Publicación real de la cuenta, para probar la inserción
+  - https://www.instagram.com/p/De7sIExtf0F/
+  - https://www.instagram.com/p/DffNhbXAcQ2/
 ---
 
 **Trabajo de ejemplo en borrador: solo se ve con `npm run dev`.**

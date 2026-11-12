@@ -1,0 +1,57 @@
+---
+/**
+ * Estado del permiso para mostrar Instagram en este navegador y botón para retirarlo
+ * (política de privacidad). Sin JavaScript no se puede leer el permiso, así que se explica
+ * cómo borrarlo desde el navegador.
+ */
+---
+
+<permiso-instagram class="block rounded-2xl bg-madera p-5">
+  <p data-sin-js>
+    Para retirar el permiso, borra los datos de este sitio desde la configuración de tu navegador.
+  </p>
+  <div data-control hidden>
+    <p role="status" tabindex="-1" data-mensaje>
+      Permiso para mostrar Instagram en este navegador: <strong data-estado></strong>
+    </p>
+    <button
+      type="button"
+      class="mt-3 inline-flex min-h-11 items-center rounded-full px-5 py-2 font-bold ring-2 ring-tinta/80 transition-colors ring-inset hover:bg-tinta/5"
+    >
+      Retirar el permiso
+    </button>
+  </div>
+</permiso-instagram>
+
+<script>
+  import { permisoConcedido, retirarPermiso } from '../lib/permiso-instagram';
+
+  class PermisoInstagram extends HTMLElement {
+    connectedCallback() {
+      const control = this.querySelector<HTMLElement>('[data-control]');
+      const mensaje = this.querySelector<HTMLElement>('[data-mensaje]');
+      const estado = this.querySelector('[data-estado]');
+      const boton = this.querySelector('button');
+      if (!control || !mensaje || !estado || !boton) return;
+
+      const pintar = () => {
+        const concedido = permisoConcedido();
+        estado.textContent = concedido ? 'concedido' : 'no concedido';
+        boton.hidden = !concedido;
+      };
+
+      boton.addEventListener('click', () => {
+        retirarPermiso();
+        pintar();
+        // El botón desaparece: el foco pasa al mensaje con el nuevo estado.
+        mensaje.focus();
+      });
+
+      this.querySelector('[data-sin-js]')?.remove();
+      control.hidden = false;
+      pintar();
+    }
+  }
+
+  customElements.define('permiso-instagram', PermisoInstagram);
+</script>

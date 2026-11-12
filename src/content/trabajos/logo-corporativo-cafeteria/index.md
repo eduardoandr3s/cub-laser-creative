@@ -13,8 +13,12 @@ imagenes:
   - src: ./detalle-1.jpg
     alt: Detalle del canto del logotipo cortado con láser
 videos:
-  # Video de ejemplo: sustitúyelo por uno de tu canal
-  - https://www.youtube.com/watch?v=mT2SXpFZ51E
+  # Short real del canal, para probar el reproductor
+  - https://www.youtube.com/shorts/l21d-CaAqSY
+instagram:
+  # Publicación real de la cuenta, para probar la inserción
+  - https://www.instagram.com/p/DfIaEXrt41_/
+  - https://www.instagram.com/p/DfexehutWDn/
 ---
 
 **Trabajo de ejemplo en borrador: solo se ve con `npm run dev`.**

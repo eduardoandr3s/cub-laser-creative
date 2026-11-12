@@ -3,6 +3,8 @@ import { dirname, relative, resolve } from 'node:path';
 import { defineCollection, reference } from 'astro:content';
 import { glob, type Loader } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { parseInstagram } from './lib/instagram';
+import { MAX_DESCRIPCION } from './lib/limites';
 import { parseYouTube } from './lib/youtube';
 
 /**
@@ -51,7 +53,7 @@ const categorias = defineCollection({
     nombre: z.string().trim().min(1),
     orden: z.number().int(),
     // Se usa como descripción de su página en Google: máximo 160 caracteres.
-    descripcion: z.string().trim().max(160).optional(),
+    descripcion: z.string().trim().max(MAX_DESCRIPCION).optional(),
   }),
 });
 
@@ -67,6 +69,18 @@ const videoYouTube = z.string().transform((enlace, ctx) => {
   return video;
 });
 
+const publicacionInstagram = z.string().transform((enlace, ctx) => {
+  const publicacion = parseInstagram(enlace);
+  if (!publicacion) {
+    ctx.addIssue({
+      code: 'custom',
+      message: `"${enlace}" no es el enlace de una publicación o un reel de Instagram. Usa un enlace como https://www.instagram.com/p/..., https://www.instagram.com/reel/... (no el de un perfil o una historia)`,
+    });
+    return z.NEVER;
+  }
+  return publicacion;
+});
+
 /** Un trabajo por carpeta: `src/content/trabajos/<slug>/index.md` + sus fotos. */
 const trabajos = defineCollection({
   loader: globConFotos({
@@ -78,7 +92,7 @@ const trabajos = defineCollection({
   schema: ({ image }) =>
     z.object({
       titulo: z.string().trim().min(1),
-      descripcion: z.string().trim().min(1).max(160),
+      descripcion: z.string().trim().min(1).max(MAX_DESCRIPCION),
       categoria: reference('categorias'),
       fecha: z.coerce.date(),
       portada: z.object({
@@ -94,6 +108,7 @@ const trabajos = defineCollection({
         )
         .default([]),
       videos: z.array(videoYouTube).default([]),
+      instagram: z.array(publicacionInstagram).default([]),
       material: z.string().trim().optional(),
       destacado: z.boolean().default(false),
       borrador: z.boolean().default(false),
