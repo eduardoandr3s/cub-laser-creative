@@ -6,8 +6,8 @@ fecha: 2026-11-01
 material: Contrachapado 3mm
 destacado: true
 portada:
-  src: ./foto-1.jpg
-  alt: Retrato grabado láser, niña fallera
+  src: ./foto-2.jpg
+  alt: Retrato en grabado láser, contrachapado niña fallera
 instagram:
   - https://www.instagram.com/p/DfIaEXrt41_/
 ---
